@@ -13,6 +13,7 @@ public class ChessGameFrame extends JFrame {
     private final int WIDTH;
     private final int HEIGTH;
     int twt=0;
+    int fym=0;
     public final int CHESSBOARD_SIZE;
     private GameController gameController;
 
