@@ -9,6 +9,7 @@ import model.PawnChessComponent;
 import model.KnightChessComponent;
 import model.KingChessComponent;
 import model.QueenChessComponent;
+import model.BlackBishopChessComponent;
 import controller.ClickController;
 
 import javax.swing.*;
@@ -64,6 +65,22 @@ public class Chessboard extends JComponent {
         initKingOnBoard(7, 4, ChessColor.WHITE);
         initQueenOnBoard(0, 3, ChessColor.BLACK);
         initQueenOnBoard(7, 3, ChessColor.WHITE);
+        initBlackBishopOnBoard(1, 0, ChessColor.BLACK);
+        initBlackBishopOnBoard(1, 1, ChessColor.BLACK);
+        initBlackBishopOnBoard(1, 2, ChessColor.BLACK);
+        initBlackBishopOnBoard(1, 3, ChessColor.BLACK);
+        initBlackBishopOnBoard(1, 4, ChessColor.BLACK);
+        initBlackBishopOnBoard(1, 5, ChessColor.BLACK);
+        initBlackBishopOnBoard(1, 6, ChessColor.BLACK);
+        initBlackBishopOnBoard(1, 7, ChessColor.BLACK);
+        /*initBishopOnBoard(6, 0, ChessColor.WHITE);
+        initBishopOnBoard(6, 1, ChessColor.WHITE);
+        initBishopOnBoard(6, 2, ChessColor.WHITE);
+        initBishopOnBoard(6, 3, ChessColor.WHITE);
+        initBishopOnBoard(6, 4, ChessColor.WHITE);
+        initBishopOnBoard(6, 5, ChessColor.WHITE);
+        initBishopOnBoard(6, 6, ChessColor.WHITE);
+        initBishopOnBoard(6, 7, ChessColor.WHITE);*/
     }
 
     public ChessComponent[][] getChessComponents() {
@@ -133,6 +150,11 @@ public class Chessboard extends JComponent {
     }
     private void initQueenOnBoard(int row, int col, ChessColor color) {
         ChessComponent chessComponent = new QueenChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE);
+        chessComponent.setVisible(true);
+        putChessOnBoard(chessComponent);
+    }
+    private void initBlackBishopOnBoard(int row, int col, ChessColor color) {
+        ChessComponent chessComponent = new BlackBishopChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE);
         chessComponent.setVisible(true);
         putChessOnBoard(chessComponent);
     }
