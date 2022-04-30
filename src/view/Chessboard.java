@@ -8,6 +8,7 @@ import model.RookChessComponent;
 import model.PawnChessComponent;
 import model.KnightChessComponent;
 import model.KingChessComponent;
+import model.QueenChessComponent;
 import controller.ClickController;
 
 import javax.swing.*;
@@ -61,6 +62,8 @@ public class Chessboard extends JComponent {
         initKnightOnBoard(CHESSBOARD_SIZE - 1, CHESSBOARD_SIZE - 2, ChessColor.WHITE);
         initKingOnBoard(0, 4, ChessColor.BLACK);
         initKingOnBoard(7, 4, ChessColor.WHITE);
+        initQueenOnBoard(0, 3, ChessColor.BLACK);
+        initQueenOnBoard(7, 3, ChessColor.WHITE);
     }
 
     public ChessComponent[][] getChessComponents() {
@@ -125,6 +128,11 @@ public class Chessboard extends JComponent {
     }
     private void initKingOnBoard(int row, int col, ChessColor color) {
         ChessComponent chessComponent = new KingChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE);
+        chessComponent.setVisible(true);
+        putChessOnBoard(chessComponent);
+    }
+    private void initQueenOnBoard(int row, int col, ChessColor color) {
+        ChessComponent chessComponent = new QueenChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE);
         chessComponent.setVisible(true);
         putChessOnBoard(chessComponent);
     }
