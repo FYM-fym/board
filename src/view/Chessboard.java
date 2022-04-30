@@ -6,6 +6,7 @@ import model.ChessComponent;
 import model.EmptySlotComponent;
 import model.RookChessComponent;
 import model.PawnChessComponent;
+import model.KnightChessComponent;
 import controller.ClickController;
 
 import javax.swing.*;
@@ -53,6 +54,10 @@ public class Chessboard extends JComponent {
         initPawnOnBoard(0, CHESSBOARD_SIZE - 3, ChessColor.BLACK);
         initPawnOnBoard(CHESSBOARD_SIZE - 1, 2, ChessColor.WHITE);
         initPawnOnBoard(CHESSBOARD_SIZE - 1, CHESSBOARD_SIZE - 3, ChessColor.WHITE);
+        initKnightOnBoard(0, 1, ChessColor.BLACK);
+        initKnightOnBoard(0, CHESSBOARD_SIZE - 2, ChessColor.BLACK);
+        initKnightOnBoard(CHESSBOARD_SIZE - 1, 1, ChessColor.WHITE);
+        initKnightOnBoard(CHESSBOARD_SIZE - 1, CHESSBOARD_SIZE - 2, ChessColor.WHITE);
     }
 
     public ChessComponent[][] getChessComponents() {
@@ -107,6 +112,11 @@ public class Chessboard extends JComponent {
     }
     private void initPawnOnBoard(int row, int col, ChessColor color) {
         ChessComponent chessComponent = new PawnChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE);
+        chessComponent.setVisible(true);
+        putChessOnBoard(chessComponent);
+    }
+    private void initKnightOnBoard(int row, int col, ChessColor color) {
+        ChessComponent chessComponent = new KnightChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE);
         chessComponent.setVisible(true);
         putChessOnBoard(chessComponent);
     }
