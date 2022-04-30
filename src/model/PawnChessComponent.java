@@ -58,13 +58,13 @@ public class PawnChessComponent extends ChessComponent{
             int column = source.getY();
 
             if (source.getY()-destination.getY()==source.getX()-destination.getX()){
-                for (int i = Math.min(source.getY(),destination.getY()); i < Math.max(source.getY(), destination.getY()) ; i++) {
+                for (int i = Math.min(source.getY(),destination.getY())+1; i < Math.max(source.getY(), destination.getY()) ; i++) {
                     if (!(chessComponents[i+row-column][i] instanceof EmptySlotComponent)){
                         return false;
                     }
                 }
             }else if (source.getY()-destination.getY()==destination.getX()-source.getX()){
-                for (int i = Math.min(source.getY(),destination.getY()); i < Math.max(source.getY(), destination.getY()) ; i++) {
+                for (int i = Math.min(source.getY(),destination.getY())+1; i < Math.max(source.getY(), destination.getY()) ; i++) {
                     if (!(chessComponents[-i+column+row][i] instanceof EmptySlotComponent)){
                         return false;
                     }
