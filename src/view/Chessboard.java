@@ -39,6 +39,10 @@ public class Chessboard extends JComponent {
     //all chessComponents in this chessboard are shared only one model controller
     private final ClickController clickController = new ClickController(this);
     private final int CHESS_SIZE;
+    public int Round = 0;
+    public int Round2=0;
+
+
 
 
     public Chessboard(int width, int height) {
@@ -128,6 +132,11 @@ public class Chessboard extends JComponent {
     public void swapColor() {
         currentColor = currentColor == ChessColor.BLACK ? ChessColor.WHITE : ChessColor.BLACK;
     }
+    public int addRound(){
+        Round++;
+        Round2=Round/2;
+        return Round2;
+    }
 
     private void initRookOnBoard(int row, int col, ChessColor color) {
         ChessComponent chessComponent = new RookChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE);
@@ -179,5 +188,8 @@ public class Chessboard extends JComponent {
 
     public void loadGame(List<String> chessData) {
         chessData.forEach(System.out::println);
+    }
+    public int getRound(){
+        return Round;
     }
 }

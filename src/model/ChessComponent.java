@@ -1,5 +1,6 @@
 package model;
 
+import view.Chessboard;
 import view.ChessboardPoint;
 import controller.ClickController;
 
@@ -38,7 +39,7 @@ public abstract class ChessComponent extends JComponent {
     private ChessboardPoint chessboardPoint;
     protected final ChessColor chessColor;
     private boolean selected;
-
+    public int round = 0;
     protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);//允许鼠标点击
         setLocation(location);
@@ -123,3 +124,5 @@ public abstract class ChessComponent extends JComponent {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 }
+
+

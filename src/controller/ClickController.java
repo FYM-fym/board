@@ -2,11 +2,14 @@ package controller;
 
 
 import model.ChessComponent;
+import view.ChessGameFrame;
 import view.Chessboard;
+
 
 public class ClickController {
     private final Chessboard chessboard;
     private ChessComponent first;
+    private ChessGameFrame chessGameFrame;//建立一个chessframe对象
 
     public ClickController(Chessboard chessboard) {
         this.chessboard = chessboard;
@@ -29,7 +32,7 @@ public class ClickController {
                 //repaint in swap chess method.
                 chessboard.swapChessComponents(first, chessComponent);
                 chessboard.swapColor();
-
+                chessboard.addRound();
                 first.setSelected(false);
                 first = null;
             }
@@ -54,4 +57,6 @@ public class ClickController {
         return chessComponent.getChessColor() != chessboard.getCurrentColor() &&
                 first.canMoveTo(chessboard.getChessComponents(), chessComponent.getChessboardPoint());
     }
+
+
 }

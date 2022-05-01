@@ -1,9 +1,11 @@
 package view;
 
 import controller.GameController;
+import model.ChessComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 /**
  * 这个类表示游戏过程中的整个游戏界面，是一切的载体
@@ -12,8 +14,6 @@ public class ChessGameFrame extends JFrame {
     //    public final Dimension FRAME_SIZE ;
     private final int WIDTH;
     private final int HEIGTH;
-    String sitete=" niubi";
-    String xiangbao = "niubitoo";
     public final int CHESSBOARD_SIZE;
     private GameController gameController;
 
@@ -23,7 +23,7 @@ public class ChessGameFrame extends JFrame {
         this.HEIGTH = height;
         this.CHESSBOARD_SIZE = HEIGTH * 4 / 5;
 
-        setSize(WIDTH, HEIGTH);
+        setSize(WIDTH, HEIGTH);//决定窗体的大小
         setLocationRelativeTo(null); // Center the window.
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //设置程序关闭按键，如果点击右上方的叉就游戏全部关闭了
         setLayout(null);
@@ -33,6 +33,7 @@ public class ChessGameFrame extends JFrame {
         addLabel();
         addHelloButton();
         addLoadButton();
+        addRemake();
     }
 
 
@@ -49,6 +50,8 @@ public class ChessGameFrame extends JFrame {
     /**
      * 在游戏面板中添加标签
      */
+
+
     private void addLabel() {
         JLabel statusLabel = new JLabel("Sample label");
         statusLabel.setLocation(HEIGTH, HEIGTH / 10);
@@ -60,6 +63,27 @@ public class ChessGameFrame extends JFrame {
     /**
      * 在游戏面板中增加一个按钮，如果按下的话就会显示Hello, world!
      */
+
+
+    public void addRemake() {
+        JButton button = new JButton("Remake Click Here");
+        button.addActionListener((e) -> JOptionPane.showMessageDialog(this, "Hello, world!"));
+        button.setLocation(HEIGTH, HEIGTH / 10 + 480);
+        button.setSize(200, 60);
+        button.setFont(new Font("Rockwell", Font.BOLD, 15));
+        add(button);
+
+    }
+
+    public void addRound() {
+        JLabel statusRound = new JLabel("Round:");
+        statusRound.setLocation(HEIGTH, HEIGTH / 10 + 360);
+        statusRound.setSize(200, 60);
+        statusRound.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(statusRound);
+
+    }
+
 
     private void addHelloButton() {
         JButton button = new JButton("Show Hello Here");
@@ -79,7 +103,7 @@ public class ChessGameFrame extends JFrame {
 
         button.addActionListener(e -> {
             System.out.println("Click load");
-            String path = JOptionPane.showInputDialog(this,"Input Path here");
+            String path = JOptionPane.showInputDialog(this, "Input Path here");
             gameController.loadGameFromFile(path);
         });
     }
