@@ -1,6 +1,5 @@
 package model;
 
-
 import view.ChessboardPoint;
 import controller.ClickController;
 
