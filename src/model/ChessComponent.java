@@ -27,7 +27,6 @@ public abstract class ChessComponent extends JComponent {
      * handlle click event
      */
     private ClickController clickController;
-
     /**
      * chessboardPoint: 表示8*8棋盘中，当前棋子在棋格对应的位置，如(0, 0), (1, 0), (0, 7),(7, 7)等等
      * <br>
