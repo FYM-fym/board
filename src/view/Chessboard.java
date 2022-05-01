@@ -1,6 +1,4 @@
 package view;
-
-
 import model.ChessColor;
 import model.ChessComponent;
 import model.EmptySlotComponent;
@@ -39,18 +37,14 @@ public class Chessboard extends JComponent {
     //all chessComponents in this chessboard are shared only one model controller
     private final ClickController clickController = new ClickController(this);
     private final int CHESS_SIZE;
-    public int Round = 0;
+    public int Round = 1;
     public int Round2=0;
-
-
-
 
     public Chessboard(int width, int height) {
         setLayout(null); // Use absolute layout.
         setSize(width, height);
         CHESS_SIZE = width / 8;
         System.out.printf("chessboard size = %d, chess size = %d\n", width, CHESS_SIZE);
-
         initiateEmptyChessboard();
 
         // FIXME: Initialize chessboard for testing only.
@@ -119,6 +113,16 @@ public class Chessboard extends JComponent {
 
         chess1.repaint();
         chess2.repaint();
+        System.out.println(Round);
+        Round++;
+        Round+=(Round+1)/2;
+
+        JLabel statusRound = new JLabel("Round:"+Round);
+        statusRound.setLocation(760, 760 / 10 + 500);
+        statusRound.setSize(200, 60);
+        statusRound.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(statusRound);
+        statusRound.setVisible(true);
     }
 
     public void initiateEmptyChessboard() {
@@ -132,11 +136,11 @@ public class Chessboard extends JComponent {
     public void swapColor() {
         currentColor = currentColor == ChessColor.BLACK ? ChessColor.WHITE : ChessColor.BLACK;
     }
-    public int addRound(){
+    /*public int addRound(){
         Round++;
         Round2=Round/2;
         return Round2;
-    }
+    }*/
 
     private void initRookOnBoard(int row, int col, ChessColor color) {
         ChessComponent chessComponent = new RookChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE);

@@ -62,21 +62,8 @@ public class BlackBishopChessComponent extends ChessComponent {
                 }
             }else return false;
         }
-
         return true;
 
-
-
-
-        /*if (destination.getX()==source.getX()+1&&destination.getY()==source.getY()){
-            if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)){
-                return false;
-            }
-        }else if (destination.getX()==source.getX()+1&&Math.abs(destination.getY()-source.getY())==1){
-            if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent){
-                return false;
-            }
-        }else return false;*/
 
     }
     @Override

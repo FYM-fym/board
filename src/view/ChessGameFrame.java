@@ -1,12 +1,10 @@
 package view;
 
 import controller.GameController;
-import model.ChessComponent;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 /**
  * 这个类表示游戏过程中的整个游戏界面，是一切的载体
  */
@@ -16,6 +14,7 @@ public class ChessGameFrame extends JFrame {
     private final int HEIGTH;
     public final int CHESSBOARD_SIZE;
     private GameController gameController;
+    Chessboard round = new Chessboard(getWidth(),getHeight());
 
     public ChessGameFrame(int width, int height) {
         setTitle("2022 CS102A Project Demo"); //设置标题
@@ -28,14 +27,13 @@ public class ChessGameFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //设置程序关闭按键，如果点击右上方的叉就游戏全部关闭了
         setLayout(null);
 
-
         addChessboard();
         addLabel();
         addHelloButton();
         addLoadButton();
         addRemake();
-    }
 
+    }
 
     /**
      * 在游戏面板中添加棋盘
@@ -51,8 +49,7 @@ public class ChessGameFrame extends JFrame {
      * 在游戏面板中添加标签
      */
 
-
-    private void addLabel() {
+    public void addLabel() {
         JLabel statusLabel = new JLabel("Sample label");
         statusLabel.setLocation(HEIGTH, HEIGTH / 10);
         statusLabel.setSize(200, 60);
@@ -67,7 +64,13 @@ public class ChessGameFrame extends JFrame {
 
     public void addRemake() {
         JButton button = new JButton("Remake Click Here");
-        button.addActionListener((e) -> JOptionPane.showMessageDialog(this, "Hello, world!"));
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addChessboard();
+
+            }
+        });
         button.setLocation(HEIGTH, HEIGTH / 10 + 480);
         button.setSize(200, 60);
         button.setFont(new Font("Rockwell", Font.BOLD, 15));
