@@ -32,11 +32,14 @@ public class ClickController {
                 //repaint in swap chess method.
                 chessboard.swapChessComponents(first, chessComponent);
                 chessboard.swapColor();
+
                 first.setSelected(false);
                 first = null;
             }
         }
     }
+
+
 
     /**
      * @param chessComponent 目标选取的棋子

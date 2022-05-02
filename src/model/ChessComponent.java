@@ -1,18 +1,14 @@
 package model;
-
 import view.ChessboardPoint;
 import controller.ClickController;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-
 /**
  * 这个类是一个抽象类，主要表示8*8棋盘上每个格子的棋子情况，当前有两个子类继承它，分别是EmptySlotComponent(空棋子)和RookChessComponent(车)。
  */
 public abstract class ChessComponent extends JComponent {
-
     /**
      * CHESSGRID_SIZE: 主要用于确定每个棋子在页面中显示的大小。
      * <br>
@@ -20,7 +16,6 @@ public abstract class ChessComponent extends JComponent {
      * <br>
      * 因此每个棋子占用的形状是一个正方形，大小是50*50
      */
-
 //    private static final Dimension CHESSGRID_SIZE = new Dimension(1080 / 4 * 3 / 8, 1080 / 4 * 3 / 8);
     private static final Color[] BACKGROUND_COLORS = {Color.WHITE, Color.BLACK};
     /**
@@ -37,7 +32,6 @@ public abstract class ChessComponent extends JComponent {
     private ChessboardPoint chessboardPoint;
     protected final ChessColor chessColor;
     private boolean selected;
-    public int round = 0;
     protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);//允许鼠标点击
         setLocation(location);
@@ -67,7 +61,6 @@ public abstract class ChessComponent extends JComponent {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
-
     /**
      * @param another 主要用于和另外一个棋子交换位置
      *                <br>
@@ -81,7 +74,6 @@ public abstract class ChessComponent extends JComponent {
         another.setChessboardPoint(chessboardPoint1);
         another.setLocation(point1);
     }
-
     /**
      * @param e 响应鼠标监听事件
      *          <br>
@@ -90,13 +82,11 @@ public abstract class ChessComponent extends JComponent {
     @Override
     protected void processMouseEvent(MouseEvent e) {
         super.processMouseEvent(e);
-
         if (e.getID() == MouseEvent.MOUSE_PRESSED) {
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
             clickController.onClick(this);
         }
     }
-
     /**
      * @param chessboard  棋盘
      * @param destination 目标位置，如(0, 0), (0, 7)等等
@@ -112,7 +102,6 @@ public abstract class ChessComponent extends JComponent {
      * @throws IOException 如果一些资源找不到(如棋子图片路径错误)，就会抛出异常
      */
     public abstract void loadResource() throws IOException;
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponents(g);

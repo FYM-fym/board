@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../Assignment 4/Assignment 4.iml" filepath="$PROJECT_DIR$/../Assignment 4/Assignment 4.iml" />
       <module fileurl="file://$PROJECT_DIR$/ChessDemo.iml" filepath="$PROJECT_DIR$/ChessDemo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../LAB10E/LAB10E.iml" filepath="$PROJECT_DIR$/../LAB10E/LAB10E.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Chinese/Chinese.iml" filepath="$PROJECT_DIR$/../Chinese/Chinese.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Paper/Paper.iml" filepath="$PROJECT_DIR$/../Paper/Paper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../chess-master/chess-master.iml" filepath="$PROJECT_DIR$/../chess-master/chess-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../java-chess-master/java-chess-master.iml" filepath="$PROJECT_DIR$/../java-chess-master/java-chess-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../master/master.iml" filepath="$PROJECT_DIR$/../master/master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../twt/twt.iml" filepath="$PROJECT_DIR$/../twt/twt.iml" />
     </modules>
   </component>
 </project>
