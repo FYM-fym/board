@@ -38,7 +38,6 @@ public class ClickController {
             }
         }
     }
-
     /**
      * @param chessComponent 目标选取的棋子
      * @return 目标选取的棋子是否与棋盘记录的当前行棋方颜色相同
