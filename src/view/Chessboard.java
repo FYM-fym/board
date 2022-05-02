@@ -31,7 +31,6 @@ public class Chessboard extends JComponent {
      * currentColor: 当前行棋方
      */
     private static final int CHESSBOARD_SIZE = 8;
-
     private final ChessComponent[][] chessComponents = new ChessComponent[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
     private ChessColor currentColor = ChessColor.BLACK;
     //all chessComponents in this chessboard are shared only one model controller
@@ -39,6 +38,9 @@ public class Chessboard extends JComponent {
     private final int CHESS_SIZE;
     public int Round = 1;
     public int Round2=0;
+    public JLabel statusRound;
+
+
 
     public Chessboard(int width, int height) {
         setLayout(null); // Use absolute layout.
@@ -113,12 +115,13 @@ public class Chessboard extends JComponent {
 
         chess1.repaint();
         chess2.repaint();
-        System.out.println(Round);
+        /*System.out.println(Round);
         Round++;
-        Round+=(Round+1)/2;
+        Round+=(Round+1)/2;*/
 
-        JLabel statusRound = new JLabel("Round:"+Round);
-        statusRound.setLocation(760, 760 / 10 + 500);
+        /*fym.addLabel();*/
+        statusRound = new JLabel("Round:"+Round);
+        statusRound.setLocation(760, 760 / 10 + 480);
         statusRound.setSize(200, 60);
         statusRound.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(statusRound);
@@ -135,6 +138,9 @@ public class Chessboard extends JComponent {
 
     public void swapColor() {
         currentColor = currentColor == ChessColor.BLACK ? ChessColor.WHITE : ChessColor.BLACK;
+        Round++;
+        Round2=Round/2;
+
     }
     /*public int addRound(){
         Round++;
