@@ -4,6 +4,7 @@ import view.ChessboardPoint;
 import controller.ClickController;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,12 @@ public class BlackPawnChessComponent extends ChessComponent {
         super(chessboardPoint, location, color, listener, size, special);
         initiatePawnImage(color);
     }
+    JButton b1 = new JButton("后");
+    JButton b2 = new JButton("车");
+    JButton b3 = new JButton("象");
+    JButton b4 = new JButton("马");
+    Object[] os = {b1,b2,b3,b4};
+    Icon icon = new ImageIcon("images/Pawn-white.png");
     @Override
     public boolean canMoveTo(ChessComponent[][] chessComponents, ChessboardPoint destination) {
         ChessboardPoint source = getChessboardPoint();
@@ -40,10 +47,14 @@ public class BlackPawnChessComponent extends ChessComponent {
             if (destination.getX()==source.getX()+1&&destination.getY()==source.getY()){
                 if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)){
                     return false;
+                }else if (destination.getX()==7){
+                    JOptionPane.showOptionDialog(null,"需要将兵升级成哪种棋子","兵的升变",JOptionPane.DEFAULT_OPTION,JOptionPane.DEFAULT_OPTION,icon,os,null);
                 }
             }else if (destination.getX()==source.getX()+1&&Math.abs(destination.getY()-source.getY())==1){
                 if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent){
                     return false;
+                }else if (destination.getX()==7){
+                    JOptionPane.showOptionDialog(null,"需要将兵升级成哪种棋子","兵的升变",JOptionPane.DEFAULT_OPTION,JOptionPane.DEFAULT_OPTION,icon,os,null);
                 }
             }else return false;
             return true;

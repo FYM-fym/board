@@ -43,6 +43,7 @@ public class Chessboard extends JComponent {
     public int Round2 = 0;
     public JLabel statusRound;
     public static int[][] chessmatrix = new int[8][8];
+    ArrayList<Step> steps= new ArrayList<>();
 
 
     public Chessboard(int width, int height) {
@@ -104,6 +105,7 @@ public class Chessboard extends JComponent {
         add(chessComponents[row][col] = chessComponent);
     }
 
+
     public void swapChessComponents(ChessComponent chess1, ChessComponent chess2) {
         // Note that chess1 has higher priority, 'destroys' chess2 if exists.
         if (!(chess2 instanceof EmptySlotComponent)) {
@@ -117,6 +119,7 @@ public class Chessboard extends JComponent {
         chessComponents[row2][col2] = chess2;
         chess1.repaint();
         chess2.repaint();
+
         /*System.out.println(Round);
         Round++;
         Round+=(Round+1)/2;*/
@@ -131,13 +134,21 @@ public class Chessboard extends JComponent {
     }
 
     public void swapChessMatrix(ChessComponent chess1, ChessComponent chess2) {//chess1是一开始选中的，chess2 是当前选中的
+
+        int chess1special = chess1.special;
+        int chess2special = chess2.special;
+        int x1 = chess1.getChessboardPoint().getX();
+        int y1 = chess1.getChessboardPoint().getY();
+        int x2 = chess2.getChessboardPoint().getX();
+        int y2 = chess2.getChessboardPoint().getY();
+
+
+
+
+
+
+
         if (chess2 instanceof EmptySlotComponent) {//当前选中的是空棋子
-            int chess2special = chess2.special;
-            int chess1special = chess1.special;
-            int x1 = chess1.getChessboardPoint().getX();
-            int y1 = chess1.getChessboardPoint().getY();
-            int x2 = chess2.getChessboardPoint().getX();
-            int y2 = chess2.getChessboardPoint().getY();
             chessmatrix[x1][y1] = chess2special;
             chessmatrix[x2][y2] = chess1special;
             //输出一下数组
@@ -148,11 +159,6 @@ public class Chessboard extends JComponent {
                 System.out.println();
             }
         }else {//当前选中的不是空棋子
-            int chess1special = chess1.special;
-            int x1 = chess1.getChessboardPoint().getX();
-            int y1 = chess1.getChessboardPoint().getY();
-            int x2 = chess2.getChessboardPoint().getX();
-            int y2 = chess2.getChessboardPoint().getY();
             chessmatrix[x1][y1] = 0;
             chessmatrix[x2][y2] = chess1special;
             //输出一下数组
@@ -163,6 +169,16 @@ public class Chessboard extends JComponent {
                 System.out.println();
             }
         }
+
+
+        //构造一个Step的对象，来记录这一步行棋
+        Step step = new Step(chess1.getChessboardPoint().getX(),chess1.getChessboardPoint().getY()
+                ,chess2.getChessboardPoint().getX(),chess2.getChessboardPoint().getY(),chessmatrix);
+        //每下一步棋，在行棋的步骤记录这个ArrayList里面记录下棋的这一步操作
+        steps.add(step);
+
+
+
     }
 
     public void initiateEmptyChessboard() {
@@ -281,4 +297,63 @@ public class Chessboard extends JComponent {
     public int getRound() {
         return Round;
     }
+
+
+    public boolean checkStep(ArrayList<Step> steps){
+        int box =0;
+        //判断第一次行棋是否正确
+        int x0 = steps.get(0).initialX;
+        int y0 = steps.get(0).initialY;
+        int x1 = steps.get(1).laterX;
+        int y1 = steps.get(1).laterY;
+        int[][] chessboard0 = {{-9,-11,-13,-15,-16,-14,-12,-10},{-1,-2,-3,-4,-5,-6,-7,-8},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}
+                ,{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{1,2,3,4,5,6,7,8},{9,11,13,15,16,14,12,10}};
+        int[][] chessboard1 = steps.get(0).laterChessboard;
+        if (chessboard0[x0][y0]==chessboard1[x1][y1]&&chessboard0[x1][y1]==chessboard1[x0][y0]){
+            int box2 =0;
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (chessboard0[i][j]!= chessboard1[i][j]){
+                        box2++;
+                    }
+                }
+            }
+            if (box2!=2){
+                return false;
+            }
+        }else {
+            return false;
+        }
+
+        //判断第i次行棋是否正确（i>1）
+        for (int i = 1; i < steps.size(); i++) {
+            int x = steps.get(i).initialX;
+            int y = steps.get(i).initialY;
+            int X = steps.get(i).laterX;
+            int Y = steps.get(i).laterY;
+            int [][] firstChessboard = steps.get(i-1).laterChessboard;
+            int [][] secondchessboard = steps.get(i).laterChessboard;
+            if (firstChessboard[x][y]==secondchessboard[X][Y]&&firstChessboard[X][Y]==secondchessboard[x][y]){
+                int box3=0;
+                for (int j = 0; j < 8; j++) {
+                    for (int k = 0; k <8; k++) {
+                        if (firstChessboard[j][k]!=secondchessboard[j][k]){
+                            box3++;
+                        }
+                    }
+                }
+                if (box3!=2){
+                    box++;
+                }
+            }else {
+                box++;
+            }
+            if (box!=0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }

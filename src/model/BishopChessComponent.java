@@ -4,6 +4,7 @@ import controller.ClickController;
 import view.ChessboardPoint;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +50,12 @@ public class BishopChessComponent extends ChessComponent{
         super(chessboardPoint, location, color, listener, size, special);
         initiateBishopImage(color);
     }
-
+    JButton b1 = new JButton("后");
+    JButton b2 = new JButton("车");
+    JButton b3 = new JButton("象");
+    JButton b4 = new JButton("马");
+    Object[] os = {b1,b2,b3,b4};
+    Icon icon = new ImageIcon("images/Pawn-white.png");
     @Override
     public boolean canMoveTo(ChessComponent[][] chessComponents, ChessboardPoint destination){
         ChessboardPoint source = getChessboardPoint();
