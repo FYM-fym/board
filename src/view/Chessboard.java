@@ -11,7 +11,6 @@ import model.QueenChessComponent;
 import model.BlackPawnChessComponent;
 import model.WhitePawnChessComponent;
 import controller.ClickController;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
