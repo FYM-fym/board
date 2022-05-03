@@ -38,8 +38,8 @@ public class KingChessComponent extends ChessComponent{
         }
     }
 
-    public KingChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size) {
-        super(chessboardPoint, location, color, listener, size);
+    public KingChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size,int special) {
+        super(chessboardPoint, location, color, listener, size,special);
         initiateKingImage(color);
     }
 

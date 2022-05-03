@@ -12,7 +12,7 @@ import java.io.IOException;
 public class EmptySlotComponent extends ChessComponent {
 
     public EmptySlotComponent(ChessboardPoint chessboardPoint, Point location, ClickController listener, int size) {
-        super(chessboardPoint, location, ChessColor.NONE, listener, size);
+        super(chessboardPoint, location, ChessColor.NONE, listener, size,0);
     }
 
     @Override

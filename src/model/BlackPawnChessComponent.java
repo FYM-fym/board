@@ -8,30 +8,30 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-public class BlackBishopChessComponent extends ChessComponent {
-    private static Image BISHOP_BLACK;
-    private Image bishopImage;
+public class BlackPawnChessComponent extends ChessComponent {
+    private static Image Pawn_BLACK;
+    private Image PawnImage;
     public void loadResource() throws IOException {
 
-        if (BISHOP_BLACK == null) {
-            BISHOP_BLACK = ImageIO.read(new File("./images/bishop-black.png"));
+        if (Pawn_BLACK == null) {
+            Pawn_BLACK = ImageIO.read(new File("./images/Pawn-black.png"));
         }
     }
 
-    private void initiateBishopImage(ChessColor color) {
+    private void initiatePawnImage(ChessColor color) {
         try {
             loadResource();
             if (color == ChessColor.BLACK) {
-                bishopImage = BISHOP_BLACK;
+                PawnImage = Pawn_BLACK;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public BlackBishopChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size) {
-        super(chessboardPoint, location, color, listener, size);
-        initiateBishopImage(color);
+    public BlackPawnChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size,int special) {
+        super(chessboardPoint, location, color, listener, size, special);
+        initiatePawnImage(color);
     }
     @Override
     public boolean canMoveTo(ChessComponent[][] chessComponents, ChessboardPoint destination) {
@@ -70,7 +70,7 @@ public class BlackBishopChessComponent extends ChessComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 //        g.drawImage(rookImage, 0, 0, getWidth() - 13, getHeight() - 20, this);
-        g.drawImage(bishopImage, 0, 0, getWidth() , getHeight(), this);
+        g.drawImage(PawnImage, 0, 0, getWidth() , getHeight(), this);
         g.setColor(Color.BLACK);
         if (isSelected()) { // Highlights the model if selected.
             g.setColor(Color.RED);

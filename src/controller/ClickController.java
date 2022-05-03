@@ -16,7 +16,7 @@ public class ClickController {
     }
 
     public void onClick(ChessComponent chessComponent) {
-        if (first == null) {
+        if (first == null) {//选中的棋子是chessComponent，并且当前状态是没选中棋子
             if (handleFirst(chessComponent)) {
                 chessComponent.setSelected(true);
                 first = chessComponent;
@@ -30,9 +30,9 @@ public class ClickController {
                 recordFirst.repaint();
             } else if (handleSecond(chessComponent)) {
                 //repaint in swap chess method.
+                chessboard.swapChessMatrix(first,chessComponent);
                 chessboard.swapChessComponents(first, chessComponent);
                 chessboard.swapColor();
-
                 first.setSelected(false);
                 first = null;
             }

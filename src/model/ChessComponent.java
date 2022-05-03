@@ -32,7 +32,8 @@ public abstract class ChessComponent extends JComponent {
     private ChessboardPoint chessboardPoint;
     protected final ChessColor chessColor;
     private boolean selected;
-    protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
+    public int special;
+    protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size, int special) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);//允许鼠标点击
         setLocation(location);
         setSize(size, size);
@@ -40,7 +41,9 @@ public abstract class ChessComponent extends JComponent {
         this.chessColor = chessColor;
         this.selected = false;
         this.clickController = clickController;
+        this.special=special;
     }
+
 
     public ChessboardPoint getChessboardPoint() {
         return chessboardPoint;
