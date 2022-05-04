@@ -35,6 +35,7 @@ public class ClickController {
                 //repaint in swap chess method.
                 chessboard.swapChessMatrix(first,chessComponent);
                 chessboard.swapChessComponents(first, chessComponent);
+
                 chessboard.swapColor();
                 first.setSelected(false);
                 first = null;
