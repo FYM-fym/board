@@ -16,7 +16,7 @@ public class ChessGameFrame extends JFrame {
     public final int CHESSBOARD_SIZE;
     private GameController gameController;
     Chessboard round = new Chessboard(608,608);
-    public ClickController clickController = new ClickController();
+    //public ClickController clickController = new ClickController();
 
 
     public ChessGameFrame(int width, int height) {

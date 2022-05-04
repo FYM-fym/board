@@ -13,6 +13,9 @@ import model.WhitePawnChessComponent;
 import controller.ClickController;
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,12 +143,6 @@ public class Chessboard extends JComponent {
         int y1 = chess1.getChessboardPoint().getY();
         int x2 = chess2.getChessboardPoint().getX();
         int y2 = chess2.getChessboardPoint().getY();
-
-
-
-
-
-
 
         if (chess2 instanceof EmptySlotComponent) {//当前选中的是空棋子
             chessmatrix[x1][y1] = chess2special;
@@ -298,7 +295,7 @@ public class Chessboard extends JComponent {
     }
 
 
-    public String checkStep(ArrayList<Step> steps){
+    public boolean checkStep(ArrayList<Step> steps){
         int box =0;
         //判断第一次行棋是否正确
         int x0 = steps.get(0).initialX;
@@ -308,13 +305,19 @@ public class Chessboard extends JComponent {
         int[][] chessboard0 = {{-9,-11,-13,-15,-16,-14,-12,-10},{-1,-2,-3,-4,-5,-6,-7,-8},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}
                 ,{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{1,2,3,4,5,6,7,8},{9,11,13,15,16,14,12,10}};
         int[][] chessboard1 = steps.get(0).laterChessboard;
+
+
         //对棋盘大小8*8的检测
-        if (steps.size()!=8)return "存储数组的大小错误";
+        if (steps.size()!=8)return false;
         for (int i = 0; i < steps.size(); i++) {
             if (steps.get(i).laterChessboard.length!=8){
-                return "存储数组的大小错误";
+                return false;
             }
         }
+
+
+
+        //对棋盘信息的检测
         if (chessboard0[x0][y0]==chessboard1[x1][y1]&&chessboard0[x1][y1]==chessboard1[x0][y0]){
             int box2 =0;
             for (int i = 0; i < 8; i++) {
@@ -325,10 +328,10 @@ public class Chessboard extends JComponent {
                 }
             }
             if (box2!=2){
-                return "棋盘信息错误";
+                return false;
             }
         }else {
-            return "棋盘信息错误";
+            return false;
         }
 
         //判断第i次行棋是否正确（i>1）
@@ -349,17 +352,33 @@ public class Chessboard extends JComponent {
                     }
                 }
                 if (box3!=2){
-                    box++;
+                    return false;
                 }
             }else {
-                box++;
-            }
-            if (box!=0){
-                return "棋盘信息错误";
+                return false;
             }
         }
-        return "棋盘信息错误";
+        return true;
     }
 
 
+    public void Writer(ArrayList<Step>steps) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\DELL\\IdeaProjects\\Store"));
+        StringBuilder stringBuilder = new StringBuilder();
+        //遍历输出x,y,X,Y,chessBoardMatrix
+        for (int i = 0; i < steps.size(); i++) {
+            int x=steps.get(i).initialX;
+            int y=steps.get(i).initialY;
+            int X=steps.get(i).laterX;
+            int Y=steps.get(i).laterY;
+            int [][] chessBoardMatrix = steps.get(i).laterChessboard;
+            writer.write(x);writer.write(y);writer.write(X);writer.write(Y);writer.newLine();
+            for (int j = 0; j < 8; j++) {
+                for (int k = 0; k < 8; k++) {
+                    writer.write(chessBoardMatrix[j][k]);//一行一行存
+                }
+                writer.newLine();
+            }
+        }
+    }
 }

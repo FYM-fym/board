@@ -110,11 +110,11 @@ public class WhitePawnChessComponent extends ChessComponent{
 
         @Override
         public void mousePressed(MouseEvent e) {
-            if(e.getSource().equals(b1))
+            /*if(e.getSource().equals(b1))
             {
                 Chessboard chessboard = new Chessboard(608,608);//当前的chessboard
                 chessboard.putChessOnBoard(chessboard.putChessOnBoard(););
-            }
+            }*/
 
         }
 
