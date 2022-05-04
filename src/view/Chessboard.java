@@ -131,6 +131,63 @@ public class Chessboard extends JComponent {
         statusRound.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(statusRound);
         statusRound.setVisible(true);
+
+
+
+
+
+
+        int x;
+        for (int i = 0;i<=7;i++){
+            if (chessmatrix[0][i]>=1 && chessmatrix[0][i]<=8){
+                repaint();
+                String[] options = {"后","车","象","马"};
+                Icon icon = new ImageIcon("images/Pawn-white.png");
+                x = JOptionPane.showOptionDialog(null,"需要将兵升级成哪种棋子","兵的升变",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,icon,options,null);
+                if (x==0){
+                    initQueenOnBoard(0,i,ChessColor.WHITE,15);
+                    repaint();
+                    break;
+                }else if (x==1){
+                    initRookOnBoard(0,i,ChessColor.WHITE,9);
+                    repaint();
+                    break;
+                }else if (x==2){
+                    initBishopOnBoard(0,i,ChessColor.WHITE,13);
+                    repaint();
+                    break;
+                }else if (x==3){
+                    initKnightOnBoard(0,i,ChessColor.WHITE,11);
+                    repaint();
+                    break;
+                }
+            }
+        }
+        for (int i = 0;i<=7;i++){
+            if (chessmatrix[7][i]<=-1 && chessmatrix[7][i]>=-8){
+                repaint();
+                String[] options = {"后","车","象","马"};
+                Icon icon = new ImageIcon("images/Pawn-black.png");
+                x = JOptionPane.showOptionDialog(null,"需要将兵升级成哪种棋子","兵的升变",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,icon,options,null);
+                if (x==0){
+                    initQueenOnBoard(7,i,ChessColor.BLACK,-15);
+                    repaint();
+                    break;
+                }else if (x==1){
+                    initRookOnBoard(7,i,ChessColor.BLACK,-9);
+                    repaint();
+                    break;
+                }else if (x==2){
+                    initBishopOnBoard(7,i,ChessColor.BLACK,-13);
+                    repaint();
+                    break;
+                }else if (x==3){
+                    initKnightOnBoard(7,i,ChessColor.BLACK,-11);
+                    repaint();
+                    break;
+                }
+            }
+        }
     }
 
     public void swapChessMatrix(ChessComponent chess1, ChessComponent chess2) {//chess1是一开始选中的，chess2 是当前选中的
@@ -170,20 +227,7 @@ public class Chessboard extends JComponent {
                 , chess2.getChessboardPoint().getX(), chess2.getChessboardPoint().getY(), chessmatrix);
         //每下一步棋，在行棋的步骤记录这个ArrayList里面记录下棋的这一步操作
         steps.add(step);
-
-        int x;
-        for (int i = 0;i<=7;i++){
-            if (chessmatrix[0][i]>=1 && chessmatrix[0][i]<=8){
-                String[] options = {"后","车","象","马"};
-                Icon icon = new ImageIcon("images/Pawn-white.png");
-                x = JOptionPane.showOptionDialog(null,"需要将兵升级成哪种棋子","兵的升变",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,icon,options,null);
-                if (x==0){
-                    initQueenOnBoard(0,i,ChessColor.WHITE,15);
-                    repaint();
-                    break;
-                }
-            }
-        }
+        repaint();
 
     }
 
