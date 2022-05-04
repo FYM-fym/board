@@ -1,5 +1,6 @@
 package model;
 
+import view.Chessboard;
 import view.ChessboardPoint;
 import controller.ClickController;
 
@@ -111,7 +112,8 @@ public class WhitePawnChessComponent extends ChessComponent{
         public void mousePressed(MouseEvent e) {
             if(e.getSource().equals(b1))
             {
-                //
+                Chessboard chessboard = new Chessboard(608,608);//当前的chessboard
+                chessboard.putChessOnBoard(chessboard.putChessOnBoard(););
             }
 
         }

@@ -298,7 +298,7 @@ public class Chessboard extends JComponent {
     }
 
 
-    public boolean checkStep(ArrayList<Step> steps){
+    public String checkStep(ArrayList<Step> steps){
         int box =0;
         //判断第一次行棋是否正确
         int x0 = steps.get(0).initialX;
@@ -308,6 +308,10 @@ public class Chessboard extends JComponent {
         int[][] chessboard0 = {{-9,-11,-13,-15,-16,-14,-12,-10},{-1,-2,-3,-4,-5,-6,-7,-8},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}
                 ,{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{1,2,3,4,5,6,7,8},{9,11,13,15,16,14,12,10}};
         int[][] chessboard1 = steps.get(0).laterChessboard;
+        if (steps.size()!=8)return "存储数组的大小错误！";
+        for (int i = 0; i < steps.size(); i++) {
+            if (steps.get(i).laterChessboard.)
+        }
         if (chessboard0[x0][y0]==chessboard1[x1][y1]&&chessboard0[x1][y1]==chessboard1[x0][y0]){
             int box2 =0;
             for (int i = 0; i < 8; i++) {

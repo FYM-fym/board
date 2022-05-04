@@ -1,5 +1,6 @@
 package view;
 
+import controller.ClickController;
 import controller.GameController;
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,7 @@ public class ChessGameFrame extends JFrame {
     public final int CHESSBOARD_SIZE;
     private GameController gameController;
     Chessboard round = new Chessboard(608,608);
-
+    public ClickController clickController = new ClickController();
 
 
     public ChessGameFrame(int width, int height) {
@@ -54,7 +55,7 @@ public class ChessGameFrame extends JFrame {
      */
 
     public void addLabel() {
-        JLabel statusLabel = new JLabel("Sample label"+round.Round2);
+        JLabel statusLabel = new JLabel("Sample label");
         statusLabel.setLocation(HEIGTH, HEIGTH / 10);
         statusLabel.setSize(200, 60);
         statusLabel.setFont(new Font("Rockwell", Font.BOLD, 20));

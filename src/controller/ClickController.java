@@ -9,7 +9,10 @@ import view.Chessboard;
 public class ClickController {
     private final Chessboard chessboard;
     private ChessComponent first;
-    private ChessGameFrame chessGameFrame;//建立一个chessframe对象
+    int Round = 2;
+    int Round2 = 1;
+
+
 
     public ClickController(Chessboard chessboard) {
         this.chessboard = chessboard;
@@ -35,6 +38,8 @@ public class ClickController {
                 chessboard.swapColor();
                 first.setSelected(false);
                 first = null;
+                Round++;
+                Round2=Round/2;
             }
         }
     }
