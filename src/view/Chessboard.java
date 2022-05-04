@@ -308,9 +308,12 @@ public class Chessboard extends JComponent {
         int[][] chessboard0 = {{-9,-11,-13,-15,-16,-14,-12,-10},{-1,-2,-3,-4,-5,-6,-7,-8},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}
                 ,{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{1,2,3,4,5,6,7,8},{9,11,13,15,16,14,12,10}};
         int[][] chessboard1 = steps.get(0).laterChessboard;
-        if (steps.size()!=8)return "存储数组的大小错误！";
+        //对棋盘大小8*8的检测
+        if (steps.size()!=8)return "存储数组的大小错误";
         for (int i = 0; i < steps.size(); i++) {
-            if (steps.get(i).laterChessboard.)
+            if (steps.get(i).laterChessboard.length!=8){
+                return "存储数组的大小错误";
+            }
         }
         if (chessboard0[x0][y0]==chessboard1[x1][y1]&&chessboard0[x1][y1]==chessboard1[x0][y0]){
             int box2 =0;
@@ -322,10 +325,10 @@ public class Chessboard extends JComponent {
                 }
             }
             if (box2!=2){
-                return false;
+                return "棋盘信息错误";
             }
         }else {
-            return false;
+            return "棋盘信息错误";
         }
 
         //判断第i次行棋是否正确（i>1）
@@ -352,10 +355,10 @@ public class Chessboard extends JComponent {
                 box++;
             }
             if (box!=0){
-                return false;
+                return "棋盘信息错误";
             }
         }
-        return true;
+        return "棋盘信息错误";
     }
 
 
