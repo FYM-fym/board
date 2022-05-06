@@ -1,9 +1,13 @@
 package controller;
 
 
+import model.BlackPawnChessComponent;
 import model.ChessComponent;
+import model.EmptySlotComponent;
+import model.WhitePawnChessComponent;
 import view.ChessGameFrame;
 import view.Chessboard;
+import view.Step;
 
 
 public class ClickController {

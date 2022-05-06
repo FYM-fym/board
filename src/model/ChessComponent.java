@@ -1,6 +1,9 @@
 package model;
+import view.Chessboard;
 import view.ChessboardPoint;
 import controller.ClickController;
+import view.Step;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -33,7 +36,8 @@ public abstract class ChessComponent extends JComponent {
     protected final ChessColor chessColor;
     private boolean selected;
     public int special;
-    protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size, int special) {
+    public int WhetherFirst;
+    protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size, int special,int WhetherFirst) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);//允许鼠标点击
         setLocation(location);
         setSize(size, size);
@@ -42,6 +46,7 @@ public abstract class ChessComponent extends JComponent {
         this.selected = false;
         this.clickController = clickController;
         this.special=special;
+        this.WhetherFirst=WhetherFirst;
     }
 
 
@@ -98,6 +103,9 @@ public abstract class ChessComponent extends JComponent {
      * 这个方法主要是检查移动的合法性，如果合法就返回true，反之是false
      */
     public abstract boolean canMoveTo(ChessComponent[][] chessboard, ChessboardPoint destination);
+/*
+    public abstract boolean canMoveTo2(ChessComponent[][] chessComponents, ChessboardPoint destination, Step step, Chessboard chessboard, ClickController clickController);
+*/
 
     /**
      * 这个方法主要用于加载一些特定资源，如棋子图片等等。

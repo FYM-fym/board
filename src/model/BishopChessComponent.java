@@ -46,8 +46,8 @@ public class BishopChessComponent extends ChessComponent{
         }
     }
 
-    public BishopChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size,int special) {
-        super(chessboardPoint, location, color, listener, size, special);
+    public BishopChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size,int special,int WhetherFirst) {
+        super(chessboardPoint, location, color, listener, size, special,WhetherFirst);
         initiateBishopImage(color);
     }
     JButton b1 = new JButton("后");

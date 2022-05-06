@@ -1,6 +1,6 @@
 package view;
 
-import controller.ClickController;
+
 import controller.GameController;
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +15,7 @@ public class ChessGameFrame extends JFrame {
     private final int HEIGTH;
     public final int CHESSBOARD_SIZE;
     private GameController gameController;
-    Chessboard round = new Chessboard(608,608);
-    //public ClickController clickController = new ClickController();
+    Chessboard chessboard = new Chessboard(608,608);
 
 
     public ChessGameFrame(int width, int height) {
@@ -30,25 +29,20 @@ public class ChessGameFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //设置程序关闭按键，如果点击右上方的叉就游戏全部关闭了
         setLayout(null);
 
+        gameController = new GameController(chessboard);
+        chessboard.setLocation(HEIGTH / 10, HEIGTH / 10);
+        add(chessboard);
 
-        addChessboard();
         addLabel();
         addHelloButton();
         addLoadButton();
         addRemake();
         addReturnButton();
-
-
     }
     /**
      * 在游戏面板中添加棋盘
      */
-    public void addChessboard() {
-        Chessboard chessboard = new Chessboard(CHESSBOARD_SIZE, CHESSBOARD_SIZE);
-        gameController = new GameController(chessboard);
-        chessboard.setLocation(HEIGTH / 10, HEIGTH / 10);
-        add(chessboard);
-    }
+
 
     /**
      * 在游戏面板中添加标签
@@ -68,19 +62,8 @@ public class ChessGameFrame extends JFrame {
 
 
     public void addRemake() {
-        JButton button = new JButton("Remake Click Here");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                Chessboard chessboard = new Chessboard(CHESSBOARD_SIZE, CHESSBOARD_SIZE);
-                gameController = new GameController(chessboard);
-                chessboard.setLocation(HEIGTH / 10, HEIGTH / 10);
-                addChessboard();
-
-
-            }
-        });
+        JButton button = new JButton("新游戏");
+        button.addActionListener(e -> chessboard.newGame());
         button.setLocation(HEIGTH, HEIGTH / 10 + 480);
         button.setSize(200, 60);
         button.setFont(new Font("Rockwell", Font.BOLD, 15));

@@ -1,5 +1,6 @@
 package model;
 
+import view.Chessboard;
 import view.ChessboardPoint;
 import controller.ClickController;
 
@@ -19,7 +20,7 @@ public class RookChessComponent extends ChessComponent {
      */
     private static Image ROOK_WHITE;
     private static Image ROOK_BLACK;
-
+    Chessboard chessboard;
     /**
      * 车棋子对象自身的图片，是上面两种中的一种
      */
@@ -60,8 +61,8 @@ public class RookChessComponent extends ChessComponent {
         }
     }
 
-    public RookChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size,int special) {
-        super(chessboardPoint, location, color, listener, size,special);
+    public RookChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size,int special,int WhetherFirst) {
+        super(chessboardPoint, location, color, listener, size,special,WhetherFirst);
         initiateRookImage(color);
     }
 
@@ -95,8 +96,13 @@ public class RookChessComponent extends ChessComponent {
         } else { // Not on the same row or the same column.
             return false;
         }
+
+
+        chessComponents[source.getX()][source.getY()].WhetherFirst=1;
         return true;
     }
+
+
 
     /**
      * 注意这个方法，每当窗体受到了形状的变化，或者是通知要进行绘图的时候，就会调用这个方法进行画图。

@@ -3,11 +3,11 @@ package view;
 
 public class Step {
 
-    int initialX;
-    int initialY;
-    int laterX;
-    int laterY;
-    int[][] laterChessboard ;
+    public int initialX;
+    public int initialY;
+    public int laterX;
+    public int laterY;
+    public int[][] laterChessboard ;
 
 
     public Step(int initialX, int initialY, int laterX, int laterY, int[][] laterChessboard) {

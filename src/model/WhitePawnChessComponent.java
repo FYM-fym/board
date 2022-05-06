@@ -17,6 +17,8 @@ import java.io.IOException;
 public class WhitePawnChessComponent extends ChessComponent{
     private static Image Pawn_WHITE;
     private Image PawnImage;
+    int WhetherFirst;
+    public Chessboard chessboard;
     public void loadResource() throws IOException {
 
         if (Pawn_WHITE == null) {
@@ -35,8 +37,9 @@ public class WhitePawnChessComponent extends ChessComponent{
         }
     }
 
-    public WhitePawnChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size, int special) {
-        super(chessboardPoint, location, color, listener, size,special);
+    public WhitePawnChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size, int special,int WhetherFirst) {
+        super(chessboardPoint, location, color, listener, size,special,WhetherFirst);
+        this.WhetherFirst=WhetherFirst;
         initiatePawnImage(color);
     }
 
@@ -44,6 +47,24 @@ public class WhitePawnChessComponent extends ChessComponent{
     @Override
     public boolean canMoveTo(ChessComponent[][] chessComponents, ChessboardPoint destination) {
         ChessboardPoint source = getChessboardPoint();
+        if (source.getX()==3){
+            if (chessComponents[source.getX()][destination.getY()]instanceof BlackPawnChessComponent){
+                if (chessComponents[source.getX()][destination.getY()+1].WhetherFirst==1){
+                    if (chessComponents[destination.getX()][destination.getY()]instanceof EmptySlotComponent){
+                        System.out.println("AAA");
+                        remove(chessComponents[source.getX()][destination.getY()+1]);
+                        /*chessboard.putChessOnBoard(chessComponents[destination.getX()][destination.getY()]);*/
+                        System.out.println("BBB");
+                        return true;
+                    }
+                }
+            }
+        }
+
+
+
+
+
         if (source.getX()!=6) {
             if (destination.getX()==source.getX()-1&&destination.getY()==source.getY()){
                 if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)){
@@ -54,6 +75,7 @@ public class WhitePawnChessComponent extends ChessComponent{
                     return false;
                 }
             }else return false;
+            chessComponents[source.getX()][source.getY()].WhetherFirst=2;
             return true;
         }else if (source.getX()==6){
             if (destination.getX()==source.getX()-1&&destination.getY()==source.getY()){
@@ -70,6 +92,7 @@ public class WhitePawnChessComponent extends ChessComponent{
                 }
             }else return false;
         }
+        chessComponents[source.getX()][source.getY()].WhetherFirst=1;
         return true;
     }
     @Override

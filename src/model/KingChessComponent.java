@@ -38,8 +38,8 @@ public class KingChessComponent extends ChessComponent{
         }
     }
 
-    public KingChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size,int special) {
-        super(chessboardPoint, location, color, listener, size,special);
+    public KingChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size,int special,int WhetherFirst) {
+        super(chessboardPoint, location, color, listener, size,special,WhetherFirst);
         initiateKingImage(color);
     }
 
@@ -47,6 +47,7 @@ public class KingChessComponent extends ChessComponent{
     public boolean canMoveTo(ChessComponent[][] chessComponents, ChessboardPoint destination) {
         ChessboardPoint source = getChessboardPoint();
         if (Math.abs(source.getX()-destination.getX())<=1 && Math.abs(source.getY()-destination.getY())<=1){
+            chessComponents[source.getX()][source.getY()].WhetherFirst=1;
             return true;
         }else return false;
     }
