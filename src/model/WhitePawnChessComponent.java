@@ -47,19 +47,19 @@ public class WhitePawnChessComponent extends ChessComponent{
     @Override
     public boolean canMoveTo(ChessComponent[][] chessComponents, ChessboardPoint destination) {
         ChessboardPoint source = getChessboardPoint();
-        if (source.getX()==3){
+        /*if (source.getX()==3){
             if (chessComponents[source.getX()][destination.getY()]instanceof BlackPawnChessComponent){
                 if (chessComponents[source.getX()][destination.getY()+1].WhetherFirst==1){
                     if (chessComponents[destination.getX()][destination.getY()]instanceof EmptySlotComponent){
-                        System.out.println("AAA");
-                        remove(chessComponents[source.getX()][destination.getY()+1]);
-                        /*chessboard.putChessOnBoard(chessComponents[destination.getX()][destination.getY()]);*/
-                        System.out.println("BBB");
+                        //remove(chessComponents[source.getX()][destination.getY()+1]);
+                        *//*chessboard.putChessOnBoard(new EmptySlotComponent());*//*
+                        repaint();
+                        chessboard.putChessOnBoard(chessComponents[destination.getX()][destination.getY()]);
                         return true;
                     }
                 }
             }
-        }
+        }*/
 
 
 

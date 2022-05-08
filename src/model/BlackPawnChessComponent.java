@@ -50,7 +50,7 @@ public class BlackPawnChessComponent extends ChessComponent {
                     return false;
                 }
             }else return false;
-            chessComponents[source.getX()][source.getY()].WhetherFirst=2;
+            chessComponents[source.getX()][source.getY()].WhetherFirst++;
             return true;
         }else if (source.getX()==1){
             if (destination.getX()==source.getX()+1&&destination.getY()==source.getY()){
@@ -67,43 +67,22 @@ public class BlackPawnChessComponent extends ChessComponent {
                 }
             }else return false;
         }
-        chessComponents[source.getX()][source.getY()].WhetherFirst=1;
+        chessComponents[source.getX()][source.getY()].WhetherFirst++;
         return true;
     }
 
 
 
-    public boolean canMoveTo2(ChessComponent[][] chessComponents, ChessboardPoint destination,Step step,Chessboard chessboard,ClickController clickController){
+    /*public boolean canMoveTo2(ChessComponent[][] chessComponents, ChessboardPoint destination,Step step,Chessboard chessboard,ClickController clickController){
         if (IfEatRoad(chessComponents,destination,step)){
             EatRoadPawn(chessComponents,destination,step,chessboard,clickController);
             return true;
         }else return false;
-    }
+    }*/
 
 
-    //判断是否可以吃过路兵
-    public boolean IfEatRoad(ChessComponent[][] chessComponents, ChessboardPoint destination, Step step){
-        ChessboardPoint source = getChessboardPoint();
-        int x =source.getX();
-        int y =source.getY();
-        if (x==3&&destination.getX()==2){
-            if (chessComponents[x][y-1]instanceof BlackPawnChessComponent||chessComponents[x][y+1]instanceof BlackPawnChessComponent){
-                if (step.initialX==1&&step.initialY==destination.getY()){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
 
-    //执行吃过路兵的操作
-    public void EatRoadPawn(ChessComponent[][] chessComponents, ChessboardPoint destination,Step step,Chessboard chessboard,ClickController clickController){
-        if (IfEatRoad(chessComponents, destination,step)){
-            Chessboard.chessmatrix[destination.getX()][destination.getY()+1] = 0;
-            chessboard.putChessOnBoard(new EmptySlotComponent(new ChessboardPoint(destination.getX(), destination.getY()+1), new Point(destination.getX() * 76, (destination.getY()+1) * 76), clickController, 76));
-        }
-    }
 
     @Override
     protected void paintComponent(Graphics g) {

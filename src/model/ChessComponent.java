@@ -34,6 +34,8 @@ public abstract class ChessComponent extends JComponent {
      */
     private ChessboardPoint chessboardPoint;
     protected final ChessColor chessColor;
+    public Chessboard chessboard;
+    public Step step;
     private boolean selected;
     public int special;
     public int WhetherFirst;
