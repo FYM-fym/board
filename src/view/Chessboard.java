@@ -62,7 +62,7 @@ public class Chessboard extends JComponent  {
         f.add(jPanel);
         f.setLayout(null);
 
-        JLabel label = new JLabel(new ImageIcon("./images/horse.jpg"));
+        JLabel label = new JLabel(new ImageIcon("C:\\Users\\DELL\\Desktop\\ChessDemo\\images\\horse.jpg"));
         f.add(label);
         label.setBounds(0, 0, f.getWidth(), f.getHeight());
         label.setFont(new Font("Rockwell",Font.BOLD,20));
@@ -261,6 +261,28 @@ public class Chessboard extends JComponent  {
                 initRookOnBoard(7,5,ChessColor.WHITE,10,1);
                 repaint();
             }
+        }
+
+
+
+        //吃过路兵的操作
+        //黑色吃下面的白
+        if (steps.size() >= 2 && steps.get(steps.size() - 1).laterX == 6
+                && chessComponents[steps.get(steps.size() - 1).initialX][steps.get(steps.size() - 1).initialY] instanceof WhitePawnChessComponent
+                && chessComponents[5][steps.get(steps.size() - 1).initialY] instanceof BlackPawnChessComponent) {
+            System.out.println("AAAAAAAAAAAAAAA");
+            initiateEmptyChessboard(4, steps.get(steps.size() - 1).initialY);
+            repaint();
+            matrixclone[4][steps.get(steps.size() - 1).initialY] = 0;
+        }
+        //白色吃上面的黑
+        if (steps.size() >= 2 && steps.get(steps.size() - 1).laterX == 1
+                && chessComponents[steps.get(steps.size() - 1).initialX][steps.get(steps.size() - 1).initialY] instanceof BlackPawnChessComponent
+                && chessComponents[2][steps.get(steps.size() - 1).initialY] instanceof WhitePawnChessComponent){
+            System.out.println("AAAAAAAAAAAAAAA");
+            initiateEmptyChessboard(3, steps.get(steps.size() - 1).initialY);
+            repaint();
+            matrixclone[3][steps.get(steps.size() - 1).initialY] = 0;
         }
 
 
@@ -680,7 +702,7 @@ public class Chessboard extends JComponent  {
 
     public void newGame() {
         Round = 1;
-        Round2 = 0;
+        Round2 = 2;
         statusRound.setText("Round: 1  White");
         currentColor = ChessColor.WHITE;
 
@@ -759,12 +781,6 @@ public class Chessboard extends JComponent  {
     public void EatWhiteRoadPawn(ChessboardPoint destination){
         chessmatrix[destination.getX()-1][destination.getY()] = 0;
         remove(chessComponents[destination.getX()-1][destination.getY()]);
-    }
-
-
-
-    public boolean KingRookChange(Chessboard chessboard){
-        return true;
     }
 
 
