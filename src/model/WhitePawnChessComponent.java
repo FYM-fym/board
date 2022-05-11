@@ -67,32 +67,41 @@ public class WhitePawnChessComponent extends ChessComponent{
 
         if (source.getX()!=6) {
             if (destination.getX()==source.getX()-1&&destination.getY()==source.getY()){
-                if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)){
-                    return false;
-                }
-            }else if (destination.getX()==source.getX()-1&&Math.abs(destination.getY()-source.getY())==1){
                 if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent){
-                    return false;
+                    return true;
+                }
+            }else if (destination.getX() == source.getX() - 1 && Math.abs(destination.getY() - source.getY()) == 1) {
+                if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)) {
+                    return true;
+                } else {//吃过路兵
+                    System.out.println(source.getX());
+                    System.out.println(Chessboard.steps.get(Chessboard.steps.size() - 1).laterX);
+                    System.out.println(Chessboard.steps.get(Chessboard.steps.size() - 1).laterY == destination.getY());
+                    System.out.println(chessComponents[source.getX()][destination.getY()].WhetherFirst);
+                    if (source.getX() == 3 && Chessboard.steps.get(Chessboard.steps.size() - 1).laterX == 1 &&
+                            Chessboard.steps.get(Chessboard.steps.size() - 1).laterY == destination.getY() &&
+                            chessComponents[source.getX()][destination.getY()].WhetherFirst == 1){
+                        return true;
+                    }
                 }
             }else return false;
-            chessComponents[source.getX()][source.getY()].WhetherFirst=2;
             return true;
-        }else if (source.getX()==6){
-            if (destination.getX()==source.getX()-1&&destination.getY()==source.getY()){
-                if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)){
-                    return false;
+        }else if (source.getX()==6) {
+            if (destination.getX() == source.getX() - 1 && destination.getY() == source.getY()) {
+                if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent) {
+                    return true;
                 }
-            }else if (destination.getX()==source.getX()-1&&Math.abs(destination.getY()-source.getY())==1){
-                if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent){
-                    return false;
+            } else if (destination.getX() == source.getX() - 1 && Math.abs(destination.getY() - source.getY()) == 1) {
+                if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)) {
+                    return true;
                 }
-            }else if (destination.getX()==source.getX()-2&&destination.getY()==source.getY()){
-                if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)){
-                    return false;
+            } else if (destination.getX() == source.getX() - 2 && destination.getY() == source.getY()) {
+                if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent) {
+                    return true;
                 }
-            }else return false;
+            } else return false;
         }
-        chessComponents[source.getX()][source.getY()].WhetherFirst=1;
+
         return true;
     }
     @Override

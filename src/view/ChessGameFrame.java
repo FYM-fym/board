@@ -80,11 +80,16 @@ public class ChessGameFrame extends JFrame {
 
     }
     public void addReturnButton(){
-        JButton button = new JButton("return");
+        JButton button = new JButton("悔棋");
         button.setSize(200,60);
         button.setLocation(HEIGTH, HEIGTH / 10 + 400);
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
-        button.addActionListener((e) -> JOptionPane.showMessageDialog(this, "Hello, world!"));
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chessboard.remake(chessboard.steps);
+            }
+        });
         add(button);
     }
 

@@ -14,8 +14,8 @@ import java.io.IOException;
 public class BlackPawnChessComponent extends ChessComponent {
     private static Image Pawn_BLACK;
     private Image PawnImage;
-    public void loadResource() throws IOException {
 
+    public void loadResource() throws IOException {
         if (Pawn_BLACK == null) {
             Pawn_BLACK = ImageIO.read(new File("./images/Pawn-black.png"));
         }
@@ -32,67 +32,62 @@ public class BlackPawnChessComponent extends ChessComponent {
         }
     }
 
-    public BlackPawnChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size,int special,int WhetherFirst) {
-        super(chessboardPoint, location, color, listener, size, special,WhetherFirst);
+    public BlackPawnChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size, int special, int WhetherFirst) {
+        super(chessboardPoint, location, color, listener, size, special, WhetherFirst);
         initiatePawnImage(color);
     }
 
     @Override
     public boolean canMoveTo(ChessComponent[][] chessComponents, ChessboardPoint destination) {
         ChessboardPoint source = getChessboardPoint();
-        if (source.getX()!=1) {
-            if (destination.getX()==source.getX()+1&&destination.getY()==source.getY()){
-                if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)){
-                    return false;
+        if (source.getX() != 1) {
+            if (destination.getX() == source.getX() + 1 && destination.getY() == source.getY()) {
+                if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent) {
+                    return true;
                 }
-            }else if (destination.getX()==source.getX()+1&&Math.abs(destination.getY()-source.getY())==1){
-                if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent){
-                    return false;
+            } else if (destination.getX() == source.getX() + 1 && Math.abs(destination.getY() - source.getY()) == 1) {
+                if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)) {
+                    return true;
+                } else {//吃过路兵
+                    System.out.println(source.getX());
+                    System.out.println(Chessboard.steps.get(Chessboard.steps.size() - 1).laterX);
+                    System.out.println(Chessboard.steps.get(Chessboard.steps.size() - 1).laterY == destination.getY());
+                    System.out.println(chessComponents[source.getX()][destination.getY()].WhetherFirst);
+                    if (source.getX() == 4 && Chessboard.steps.get(Chessboard.steps.size() - 1).laterX == 6 &&
+                            Chessboard.steps.get(Chessboard.steps.size() - 1).laterY == destination.getY() &&
+                            chessComponents[source.getX()][destination.getY()].WhetherFirst == 1) {
+                        return true;
+                    }
                 }
-            }else return false;
-            chessComponents[source.getX()][source.getY()].WhetherFirst++;
-            return true;
-        }else if (source.getX()==1){
-            if (destination.getX()==source.getX()+1&&destination.getY()==source.getY()){
-                if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)){
-                    return false;
+            }
+            return false;
+        } else if (source.getX() == 1) {
+            if (destination.getX() == source.getX() + 1 && destination.getY() == source.getY()) {
+                if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent) {
+                    return true;
                 }
-            }else if (destination.getX()==source.getX()+1&&Math.abs(destination.getY()-source.getY())==1){
-                if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent){
-                    return false;
+            } else if (destination.getX() == source.getX() + 1 && Math.abs(destination.getY() - source.getY()) == 1) {
+                if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)) {
+                    return true;
                 }
-            }else if (destination.getX()==source.getX()+2&&destination.getY()==source.getY()){
-                if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)){
-                    return false;
+            } else if (destination.getX() == source.getX() + 2 && destination.getY() == source.getY()) {
+                if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent) {
+                    return true;
                 }
-            }else return false;
+            } else return false;
         }
-        chessComponents[source.getX()][source.getY()].WhetherFirst++;
-        return true;
+        return false;
     }
-
-
-
-    /*public boolean canMoveTo2(ChessComponent[][] chessComponents, ChessboardPoint destination,Step step,Chessboard chessboard,ClickController clickController){
-        if (IfEatRoad(chessComponents,destination,step)){
-            EatRoadPawn(chessComponents,destination,step,chessboard,clickController);
-            return true;
-        }else return false;
-    }*/
-
-
-
-
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 //        g.drawImage(rookImage, 0, 0, getWidth() - 13, getHeight() - 20, this);
-        g.drawImage(PawnImage, 0, 0, getWidth() , getHeight(), this);
+        g.drawImage(PawnImage, 0, 0, getWidth(), getHeight(), this);
         g.setColor(Color.BLACK);
         if (isSelected()) { // Highlights the model if selected.
             g.setColor(Color.RED);
-            g.drawOval(0, 0, getWidth() , getHeight());
+            g.drawOval(0, 0, getWidth(), getHeight());
         }
     }
 }

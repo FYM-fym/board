@@ -39,11 +39,12 @@ public class Chessboard extends JComponent {
     //all chessComponents in this chessboard are shared only one model controller
     private final ClickController clickController = new ClickController(this);
     private final int CHESS_SIZE;
-    public int Round = 1;
-    public int Round2 = 0;
+    public static int Round = 2;
+    public static int Round2 = 0;
+
     public JLabel statusRound;
     public int[][] chessmatrix = new int[8][8];
-    public ArrayList<Step> steps = new ArrayList<>();
+    public static ArrayList<Step> steps = new ArrayList<>();
 
 
     public Chessboard(int width, int height) {
@@ -108,13 +109,17 @@ public class Chessboard extends JComponent {
 
 
     public void swapChessComponents(ChessComponent chess1, ChessComponent chess2) {
+        addRound();
         // Note that chess1 has higher priority, 'destroys' chess2 if exists.
         if (!(chess2 instanceof EmptySlotComponent)) {
             remove(chess2);
             add(chess2 = new EmptySlotComponent(chess2.getChessboardPoint(), chess2.getLocation(), clickController, CHESS_SIZE));
         }
-
+        System.out.println(chess1.WhetherFirst);
+        System.out.println(chess2.WhetherFirst);
         chess1.WhetherFirst++;
+        System.out.println(chess1.WhetherFirst);
+        System.out.println(chess2.WhetherFirst);
 
 
         chess1.swapLocation(chess2);
@@ -192,52 +197,109 @@ public class Chessboard extends JComponent {
         int[][] matrixclone = new int[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                matrixclone[i][j]=chessmatrix[i][j];
+                matrixclone[i][j] = chessmatrix[i][j];
             }
         }
 
         //进行王车移位的操作
-        if (chessComponents[0][2]instanceof KingChessComponent&&chessComponents[0][0]instanceof RookChessComponent){
-            if (chessComponents[0][2].WhetherFirst==1&&chessComponents[0][0].WhetherFirst==0){
-                initiateEmptyChessboard(0,0);
-                chessmatrix[0][0]=0;
-                initRookOnBoard(0,3,ChessColor.BLACK,-9,1);
+        if (chessComponents[0][2] instanceof KingChessComponent && chessComponents[0][0] instanceof RookChessComponent) {
+            if (chessComponents[0][2].WhetherFirst == 1 && chessComponents[0][0].WhetherFirst == 0) {
+                initiateEmptyChessboard(0, 0);
+                matrixclone[0][0] = 0;
+                initRookOnBoard(0, 3, ChessColor.BLACK, -9, 1);
+                matrixclone[0][3] = -9;
                 repaint();
             }
         }
-        if (chessComponents[0][6]instanceof KingChessComponent&&chessComponents[0][7]instanceof RookChessComponent){
-            if (chessComponents[0][6].WhetherFirst==1&&chessComponents[0][7].WhetherFirst==0){
-                initiateEmptyChessboard(0,7);
-                initRookOnBoard(0,5,ChessColor.BLACK,-10,1);
+        if (chessComponents[0][6] instanceof KingChessComponent && chessComponents[0][7] instanceof RookChessComponent) {
+            if (chessComponents[0][6].WhetherFirst == 1 && chessComponents[0][7].WhetherFirst == 0) {
+                initiateEmptyChessboard(0, 7);
+                matrixclone[0][7] = 0;
+                initRookOnBoard(0, 5, ChessColor.BLACK, -10, 1);
+                matrixclone[0][5] = -10;
                 repaint();
             }
-        }if (chessComponents[7][2]instanceof KingChessComponent&&chessComponents[7][0]instanceof RookChessComponent){
-            if (chessComponents[7][2].WhetherFirst==1&&chessComponents[7][0].WhetherFirst==0){
-                initiateEmptyChessboard(7,0);
-                initRookOnBoard(7,3,ChessColor.WHITE,9,1);
+        }
+        if (chessComponents[7][2] instanceof KingChessComponent && chessComponents[7][0] instanceof RookChessComponent) {
+            if (chessComponents[7][2].WhetherFirst == 1 && chessComponents[7][0].WhetherFirst == 0) {
+                initiateEmptyChessboard(7, 0);
+                matrixclone[7][0] = 0;
+                initRookOnBoard(7, 3, ChessColor.WHITE, 9, 1);
+                matrixclone[7][3] = 9;
                 repaint();
             }
-        }if (chessComponents[7][6]instanceof KingChessComponent&&chessComponents[7][7]instanceof RookChessComponent){
-            if (chessComponents[7][6].WhetherFirst==1&&chessComponents[7][7].WhetherFirst==0){
-                initiateEmptyChessboard(7,7);
-                initRookOnBoard(7,5,ChessColor.WHITE,10,1);
+        }
+        if (chessComponents[7][6] instanceof KingChessComponent && chessComponents[7][7] instanceof RookChessComponent) {
+            if (chessComponents[7][6].WhetherFirst == 1 && chessComponents[7][7].WhetherFirst == 0) {
+                initiateEmptyChessboard(7, 7);
+                matrixclone[7][7] = 0;
+                initRookOnBoard(7, 5, ChessColor.WHITE, 10, 1);
+                matrixclone[7][5] = 10;
                 repaint();
             }
         }
 
 
+        //吃过路兵的操作
+        //黑色吃下面的白
+        if (steps.size() >= 2 && steps.get(steps.size() - 1).laterX == 6
+                && chessComponents[steps.get(steps.size() - 1).initialX][steps.get(steps.size() - 1).initialY] instanceof WhitePawnChessComponent
+                && chessComponents[5][steps.get(steps.size() - 1).initialY] instanceof BlackPawnChessComponent) {
+            System.out.println("AAAAAAAAAAAAAAA");
+            initiateEmptyChessboard(4, steps.get(steps.size() - 1).initialY);
+            repaint();
+            matrixclone[4][steps.get(steps.size() - 1).initialY] = 0;
+        }
+        //白色吃上面的黑
+        if (steps.size() >= 2 && steps.get(steps.size() - 1).laterX == 1
+                && chessComponents[steps.get(steps.size() - 1).initialX][steps.get(steps.size() - 1).initialY] instanceof BlackPawnChessComponent
+                && chessComponents[2][steps.get(steps.size() - 1).initialY] instanceof WhitePawnChessComponent){
+            System.out.println("AAAAAAAAAAAAAAA");
+            initiateEmptyChessboard(3, steps.get(steps.size() - 1).initialY);
+            repaint();
+            matrixclone[3][steps.get(steps.size() - 1).initialY] = 0;
+        }
 
         //构造一个Step的对象，来记录这一步行棋，值得注意的是这里的存储发生在行棋交换顺序之后，而且是（如果的话）发生兵的升变之后。
         Step step = new Step(chess1.getChessboardPoint().getX(), chess1.getChessboardPoint().getY()
                 , chess2.getChessboardPoint().getX(), chess2.getChessboardPoint().getY(), matrixclone);
         //每下一步棋，在行棋的步骤记录这个ArrayList里面记录下棋的这一步操作
         steps.add(step);
+
+
+
+        //判断是否被将军
+        int blackKingx=-1;
+        int blackKingy=-1;
+        int whiteKingx=-1;
+        int whiteKingy=-1;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                System.out.print(steps.get(steps.size()-1).laterChessboard[i][j]);
+                if (chessmatrix[i][j]==16){
+                    whiteKingx=i;
+                    whiteKingy=j;
+                }
+                if (chessmatrix[i][j]==-16){
+                    blackKingx=i;
+                    blackKingy=j;
+                }
             }
             System.out.println();
         }
+        if (WhiteKingDanger(chessComponents, whiteKingx, whiteKingy)) {
+            //小福哥进行操作的位置
+        }
+        if (BlackKingDanger(chessComponents,blackKingx,blackKingy)){
+            //小福哥进行操作的位置
+        }
+
+
+
+        //逼和第一种   无子可动
+
+
+
+
 
     }
 
@@ -284,22 +346,21 @@ public class Chessboard extends JComponent {
             }
         }
     }
-    public void initiateEmptyChessboard(int x, int y){
-        chessmatrix[x][y]=0;
-        putChessOnBoard(new EmptySlotComponent(new ChessboardPoint(x,y),calculatePoint(x,y),clickController,CHESS_SIZE));
+
+    public void initiateEmptyChessboard(int x, int y) {
+        chessmatrix[x][y] = 0;
+        putChessOnBoard(new EmptySlotComponent(new ChessboardPoint(x, y), calculatePoint(x, y), clickController, CHESS_SIZE));
     }
 
     public void swapColor() {
         currentColor = currentColor == ChessColor.BLACK ? ChessColor.WHITE : ChessColor.BLACK;
-        Round++;
-        Round2 = Round / 2;
 
     }
-    /*public int addRound(){
+
+    public void addRound() {
         Round++;
-        Round2=Round/2;
-        return Round2;
-    }*/
+        Round2 = Round / 2;
+    }
 
 
     public void initRookOnBoard(int row, int col, ChessColor color, int special, int WhetherFirst) {
@@ -311,7 +372,7 @@ public class Chessboard extends JComponent {
     }
 
     public void initBishopOnBoard(int row, int col, ChessColor color, int special) {
-        ChessComponent chessComponent = new BishopChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE, special, 1);
+        ChessComponent chessComponent = new BishopChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE, special, 0);
         chessComponent.setVisible(true);
         putChessOnBoard(chessComponent);
         chessmatrix[row][col] = special;
@@ -319,7 +380,7 @@ public class Chessboard extends JComponent {
     }
 
     public void initKnightOnBoard(int row, int col, ChessColor color, int special) {
-        ChessComponent chessComponent = new KnightChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE, special, 1);
+        ChessComponent chessComponent = new KnightChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE, special, 0);
         chessComponent.setVisible(true);
         putChessOnBoard(chessComponent);
         chessmatrix[row][col] = special;
@@ -333,7 +394,7 @@ public class Chessboard extends JComponent {
     }
 
     private void initQueenOnBoard(int row, int col, ChessColor color, int special) {
-        ChessComponent chessComponent = new QueenChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE, special, 1);
+        ChessComponent chessComponent = new QueenChessComponent(new ChessboardPoint(row, col), calculatePoint(row, col), color, clickController, CHESS_SIZE, special, 0);
         chessComponent.setVisible(true);
         putChessOnBoard(chessComponent);
         chessmatrix[row][col] = special;
@@ -494,12 +555,12 @@ public class Chessboard extends JComponent {
 
 
     public void remake(ArrayList<Step> steps) {
-        if (steps.size()==1){
+        if (steps.size() == 1) {
             newGame();
             repaint();
-        }else {
+        } else {
             //输出了一次
-            for (int k=steps.size()-1;k>=0;k--) {
+            for (int k = steps.size() - 1; k >= 0; k--) {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
                         System.out.print(steps.get(steps.size() - 1).laterChessboard[i][j]);
@@ -508,17 +569,17 @@ public class Chessboard extends JComponent {
                 }
             }
             int[][] chessboardafter = steps.get(steps.size() - 2).laterChessboard.clone();
-            int [][]bb= new int[8][8];
+            int[][] bb = new int[8][8];
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    bb [i][j]=chessboardafter[i][j];
+                    bb[i][j] = chessboardafter[i][j];
                 }
             }
             repaint();
-            int b=0;
+            int b = 0;
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    b=chessboardafter[i][j];
+                    b = chessboardafter[i][j];
 
                     //System.out.print(b);
                     if (b == 1 || b == 2 || b == 3 || b == 4 || b == 5 || b == 6 || b == 7 || b == 8) {
@@ -540,8 +601,8 @@ public class Chessboard extends JComponent {
                     } else if (b == 16 || b == -16) {
                         if (b > 0) initKingOnBoard(i, j, ChessColor.WHITE, b, 0);
                         else initKingOnBoard(i, j, ChessColor.BLACK, b, 0);
-                    }else if (b==0){
-                        initiateEmptyChessboard(i,j);
+                    } else if (b == 0) {
+                        initiateEmptyChessboard(i, j);
                     }
                 }
                 //System.out.println();
@@ -681,13 +742,11 @@ public class Chessboard extends JComponent {
         repaint();
     }
 
-
-    public boolean WhiteKingDanger(ChessComponent[][] chessComponents, KingChessComponent kingChessComponent) {
-        int x = kingChessComponent.getChessboardPoint().getX();
-        int y = kingChessComponent.getChessboardPoint().getY();
+//将死
+    public boolean WhiteKingDanger(ChessComponent[][] chessComponents, int x, int y) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (chessComponents[i][j].canMoveTo(chessComponents,new ChessboardPoint(x,y))){
+                if (chessComponents[i][j].special<0&&chessComponents[i][j].canMoveTo(chessComponents, new ChessboardPoint(x, y))) {
                     return true;
                 }
             }
@@ -695,34 +754,15 @@ public class Chessboard extends JComponent {
         return false;
     }
 
-    public boolean BlackKingDanger(ChessComponent[][] chessComponents, KingChessComponent kingChessComponent) {
-        int x = kingChessComponent.getChessboardPoint().getX();
-        int y = kingChessComponent.getChessboardPoint().getY();
+    public boolean BlackKingDanger(ChessComponent[][] chessComponents, int x,int y) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (chessComponents[i][j].canMoveTo(chessComponents,new ChessboardPoint(x,y))){
+                if (chessComponents[i][j].special>0&&chessComponents[i][j].canMoveTo(chessComponents, new ChessboardPoint(x, y))) {
                     return true;
                 }
             }
         }
         return false;
-    }
-
-    //执行吃过路兵的操作
-    public void EatBlackRoadPawn(ChessboardPoint destination){
-        chessmatrix[destination.getX()+1][destination.getY()] = 0;
-        remove(chessComponents[destination.getX()+1][destination.getY()]);
-    }
-
-    public void EatWhiteRoadPawn(ChessboardPoint destination){
-        chessmatrix[destination.getX()-1][destination.getY()] = 0;
-        remove(chessComponents[destination.getX()-1][destination.getY()]);
-    }
-
-
-
-    public boolean KingRookChange(Chessboard chessboard){
-        return true;
     }
 
 
