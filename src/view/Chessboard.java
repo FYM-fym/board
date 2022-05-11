@@ -42,7 +42,7 @@ public class Chessboard extends JComponent  {
     private final ClickController clickController = new ClickController(this);
     private final int CHESS_SIZE;
     public int Round = 1;
-    public int Round2 = 0;
+    public int Round2 = 2;
     public int[][] chessmatrix = new int[8][8];
     public static ArrayList<Step> steps = new ArrayList<>();
     String player1 = "White";
@@ -165,14 +165,14 @@ public class Chessboard extends JComponent  {
         chess1.repaint();
         chess2.repaint();
 
-
-        if (Round2 % 2 == 0){
+        Round2++;
+        Round = Round2/2;
+        if (Round2 % 2 == 1){
             statusRound.setText("Round: " + Round + "  " + player2);
         }else {
             statusRound.setText("Round: " + Round + "  " + player1);
         }
-        Round2++;
-        Round += Round2%2;
+
         System.out.println(Round+"AAAAAAAAAAAAA"+Round2);
 
 //兵的升变，在这里实现
@@ -566,11 +566,13 @@ public class Chessboard extends JComponent  {
             repaint();
         }
         swapColor();
-        System.out.println(Round+"AAAAAAAAAAAAA"+Round2);
+        /*System.out.println(Round+"AAAAAAAAAAAAA"+Round2);
         Round -= Round2%2;
         System.out.println(Round+"AAAAAAAAAAAAA"+Round2);
         Round2--;
-        System.out.println(Round+"AAAAAAAAAAAAA"+Round2);
+        System.out.println(Round+"AAAAAAAAAAAAA"+Round2);*/
+        Round2--;
+        Round=Round2/2;
         if (Round2 % 2 == 0){
             if (Round==0){
                 Round = 1;
