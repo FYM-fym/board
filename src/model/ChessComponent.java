@@ -20,7 +20,7 @@ public abstract class ChessComponent extends JComponent {
      * 因此每个棋子占用的形状是一个正方形，大小是50*50
      */
 //    private static final Dimension CHESSGRID_SIZE = new Dimension(1080 / 4 * 3 / 8, 1080 / 4 * 3 / 8);
-    private static final Color[] BACKGROUND_COLORS = {Color.WHITE, Color.BLACK};
+    private static final Color[] BACKGROUND_COLORS = {Color.WHITE, Color.PINK};
     /**
      * handlle click event
      */
@@ -54,14 +54,14 @@ public abstract class ChessComponent extends JComponent {
 
     public ChessboardPoint getChessboardPoint() {
         return chessboardPoint;
-    }
+    }//返回棋子坐标
 
-    public void setChessboardPoint(ChessboardPoint chessboardPoint) {
+    public void setChessboardPoint(ChessboardPoint chessboardPoint) {//设置棋子坐标
         this.chessboardPoint = chessboardPoint;
     }
 
     public ChessColor getChessColor() {
-        return chessColor;
+        return chessColor;//返回棋子的颜色
     }
 
     public boolean isSelected() {
@@ -76,7 +76,7 @@ public abstract class ChessComponent extends JComponent {
      *                <br>
      *                调用时机是在移动棋子的时候，将操控的棋子和对应的空位置棋子(EmptySlotComponent)做交换
      */
-    public void swapLocation(ChessComponent another) {
+    public void swapLocation(ChessComponent another) {//棋子与空棋交换位置
         ChessboardPoint chessboardPoint1 = getChessboardPoint(), chessboardPoint2 = another.getChessboardPoint();
         Point point1 = getLocation(), point2 = another.getLocation();
         setChessboardPoint(chessboardPoint2);
@@ -121,7 +121,7 @@ public abstract class ChessComponent extends JComponent {
         System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
         Color squareColor = BACKGROUND_COLORS[(chessboardPoint.getX() + chessboardPoint.getY()) % 2];
         g.setColor(squareColor);
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),40,40);
     }
 }
 

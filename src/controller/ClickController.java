@@ -15,8 +15,7 @@ import java.awt.*;
 public class ClickController {
     private final Chessboard chessboard;
     private ChessComponent first;
-    int Round = 2;
-    int Round2 = 1;
+
 
 
 
@@ -38,6 +37,13 @@ public class ClickController {
                 first = null;
                 recordFirst.repaint();
             } else if (handleSecond(chessComponent)) {
+                /*if (IfEatRoad(chessboard.getChessComponents(), chessComponent.getChessboardPoint(),chessboard)==1){
+                    this.chessboard.EatBlackRoadPawn(destination);
+                }
+                if (IfEatRoad(chessboard.getChessComponents(), chessComponent.getChessboardPoint(),chessboard)==2){
+                    chessboard.EatWhiteRoadPawn(destination);
+                }*/
+
                 //repaint in swap chess method.
                 chessboard.swapChessMatrix(first,chessComponent);
                 chessboard.swapChessComponents(first, chessComponent);

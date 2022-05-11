@@ -74,18 +74,18 @@ public class WhitePawnChessComponent extends ChessComponent{
                 if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)) {
                     return true;
                 } else {//吃过路兵
-                    System.out.println(source.getX());
+                    /*System.out.println(source.getX());
                     System.out.println(Chessboard.steps.get(Chessboard.steps.size() - 1).laterX);
                     System.out.println(Chessboard.steps.get(Chessboard.steps.size() - 1).laterY == destination.getY());
-                    System.out.println(chessComponents[source.getX()][destination.getY()].WhetherFirst);
+                    System.out.println(chessComponents[source.getX()][destination.getY()].WhetherFirst);*/
                     if (source.getX() == 3 && Chessboard.steps.get(Chessboard.steps.size() - 1).laterX == 1 &&
                             Chessboard.steps.get(Chessboard.steps.size() - 1).laterY == destination.getY() &&
                             chessComponents[source.getX()][destination.getY()].WhetherFirst == 1){
                         return true;
                     }
                 }
-            }else return false;
-            return true;
+            }
+            return false;
         }else if (source.getX()==6) {
             if (destination.getX() == source.getX() - 1 && destination.getY() == source.getY()) {
                 if (chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent) {
@@ -102,7 +102,7 @@ public class WhitePawnChessComponent extends ChessComponent{
             } else return false;
         }
 
-        return true;
+        return false;
     }
     @Override
     protected void paintComponent(Graphics g) {
