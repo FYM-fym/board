@@ -76,8 +76,8 @@ public class WhitePawnChessComponent extends ChessComponent{
                 } else {//吃过路兵
                     /*System.out.println(source.getX());
                     System.out.println(Chessboard.steps.get(Chessboard.steps.size() - 1).laterX);
-                    System.out.println(Chessboard.steps.get(Chessboard.steps.size() - 1).laterY == destination.getY());
-                    System.out.println(chessComponents[source.getX()][destination.getY()].WhetherFirst);*/
+                    System.out.println(Chessboard.steps.get(Chessboard.steps.size() - 1).laterY == destination.getY());*/
+//                    System.out.println(chessComponents[source.getX()][destination.getY()].WhetherFirst);
                     if (source.getX() == 3 && Chessboard.steps.get(Chessboard.steps.size() - 1).laterX == 1 &&
                             Chessboard.steps.get(Chessboard.steps.size() - 1).laterY == destination.getY() &&
                             chessComponents[source.getX()][destination.getY()].WhetherFirst == 1){
