@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -114,9 +116,96 @@ public class ChessGameFrame extends JFrame {
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
         button.addActionListener(e -> {
-           /* System.out.println("Click load");
+            System.out.println("Click load");
             String path = JOptionPane.showInputDialog(this, "Input Path here");
-            gameController.loadGameFromFile(path);*/
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter(path));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            //遍历输出x,y,X,Y,chessBoardMatrix
+            for (int i = 0; i < Chessboard.steps.size(); i++) {
+                int x = Chessboard.steps.get(i).initialX;//后来的x
+                int y = Chessboard.steps.get(i).initialY;//....
+                int X = Chessboard.steps.get(i).laterX;//....
+                int Y = Chessboard.steps.get(i).laterY;
+                int round2 = Chessboard.steps.get(i).Round2;//....
+                int[][] chessBoardMatrix = Chessboard.steps.get(i).laterChessboard;//....
+                try {
+                    writer.write(x + '0');
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    writer.write(' ');
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    writer.write(y + '0');
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    writer.write(' ');
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    writer.write(X + '0');
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    writer.write(' ');
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    writer.write(Y + '0');
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    writer.write(' ');
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    writer.write(round2 + '0');
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    writer.newLine();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                for (int j = 0; j < 8; j++) {
+                    for (int k = 0; k < 8; k++) {
+                        try {
+                            writer.write((chessBoardMatrix[j][k]) + '0');//一行一行存
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        //System.out.println("saved: "+(char) (chessBoardMatrix[j][k]+'0'));
+                    }
+                    try {
+                        writer.newLine();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+            try {
+                writer.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+
             try {
                 chessboard.Writer(Chessboard.steps);
             } catch (IOException ex) {
