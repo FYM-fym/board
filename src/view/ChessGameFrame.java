@@ -36,6 +36,7 @@ public class ChessGameFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //设置程序关闭按键，如果点击右上方的叉就游戏全部关闭了
         setLayout(null);
 
+
         addHelloButton();
         addLoadButton();
         addRemake();
@@ -51,6 +52,7 @@ public class ChessGameFrame extends JFrame {
         gameController = new GameController(chessboard);
         chessboard.setLocation(HEIGTH / 10, HEIGTH / 10);
         add(chessboard);
+        addLabel();
 
     }
     /**
@@ -63,9 +65,10 @@ public class ChessGameFrame extends JFrame {
      */
 
     public void addLabel() {
-        JLabel statusLabel = new JLabel("Sample label");
-        statusLabel.setLocation(HEIGTH, HEIGTH / 10);
-        statusLabel.setSize(200, 60);
+        JLabel statusLabel = new JLabel(new ImageIcon("./images/background.jpeg"));
+        statusLabel.setLocation(0, 0);
+        statusLabel.setSize(1000, 760);
+        statusLabel.setOpaque(true);
         statusLabel.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(statusLabel);
     }
@@ -206,11 +209,7 @@ public class ChessGameFrame extends JFrame {
             }
 
 
-            try {
-                chessboard.Writer(Chessboard.steps);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+
         });
     }
 }
