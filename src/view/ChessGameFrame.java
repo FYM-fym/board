@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +19,7 @@ public class ChessGameFrame extends JFrame {
     public final int CHESSBOARD_SIZE;
     private GameController gameController;
     Chessboard chessboard;
-    ArrayList<Step> step = new ArrayList<>();
+
 
 
     public ChessGameFrame(int width, int height) {
@@ -113,9 +114,14 @@ public class ChessGameFrame extends JFrame {
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
         button.addActionListener(e -> {
-            System.out.println("Click load");
+           /* System.out.println("Click load");
             String path = JOptionPane.showInputDialog(this, "Input Path here");
-            gameController.loadGameFromFile(path);
+            gameController.loadGameFromFile(path);*/
+            try {
+                chessboard.Writer(Chessboard.steps);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         });
     }
 }

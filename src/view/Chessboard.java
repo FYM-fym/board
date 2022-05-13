@@ -439,11 +439,18 @@ public class Chessboard extends JComponent {
                 , {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}, {1, 2, 3, 4, 5, 6, 7, 8}, {9, 11, 13, 15, 16, 14, 12, 10}};
         int[][] chessboard1 = steps.get(0).laterChessboard;
 
-        //对棋盘大小8*8的检测
-        if (steps.size() != 8) return false;
+        if (steps.get(0).Round2 != 3) {
+            return false;
+        }
+        //对棋盘大小8*8的检测(其实没必要）
         for (int i = 0; i < steps.size(); i++) {
             if (steps.get(i).laterChessboard.length != 8) {
                 return false;
+            }
+            for (int j = 0; j < 8; j++) {
+                if (steps.get(i).laterChessboard[j].length != 8) {
+                    return false;
+                }
             }
         }
 
@@ -472,78 +479,110 @@ public class Chessboard extends JComponent {
             int Y = steps.get(i).laterY;
             int[][] firstChessboard = steps.get(i - 1).laterChessboard;
             int[][] secondchessboard = steps.get(i).laterChessboard;
-            if (firstChessboard[x][y] == secondchessboard[X][Y] && firstChessboard[X][Y] == secondchessboard[x][y]) {
-                int box3 = 0;
-                for (int j = 0; j < 8; j++) {
-                    for (int k = 0; k < 8; k++) {
-                        if (firstChessboard[j][k] != secondchessboard[j][k]) {
-                            box3++;
-                        }
-                    }
-                }
-                if (box3 != 2) {
-                    return false;
-                }
-            } else {
+
+            if (steps.get(i).Round2 != (i + 3)) {
                 return false;
             }
+
+            int box3 = 0;
+            for (int j = 0; j < 8; j++) {
+                for (int k = 0; k < 8; k++) {
+                    if (firstChessboard[j][k] != secondchessboard[j][k]) {
+                        box3++;
+                    }
+                }
+            }
+            if (box3 > 3) {
+                return false;
+            }
+
         }
         return true;
     }
 
-
-    public void Writer(ArrayList<Step> steps) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\DELL\\IdeaProjects\\Store"));
-        StringBuilder stringBuilder = new StringBuilder();
-        //遍历输出x,y,X,Y,chessBoardMatrix
-        for (int i = 0; i < steps.size(); i++) {
-            int x = steps.get(i).initialX;
-            int y = steps.get(i).initialY;
-            int X = steps.get(i).laterX;
-            int Y = steps.get(i).laterY;
-            int[][] chessBoardMatrix = steps.get(i).laterChessboard;
-            writer.write(x);
-            writer.write(y);
-            writer.write(X);
-            writer.write(Y);
-            writer.newLine();
-            for (int j = 0; j < 8; j++) {
-                for (int k = 0; k < 8; k++) {
-                    writer.write(chessBoardMatrix[j][k]);//一行一行存
+    public boolean CheckTxt() throws IOException {//首先检查错误格式
+        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\DELL\\Desktop\\ChessDemo\\resource\\save1.txt"));
+        int linenumber = 0;//行数
+        int conveniece = 0;
+        String s = null;
+        while ((s = reader.readLine()) != null) {
+            conveniece = linenumber % 9;
+            if (conveniece == 0) {
+                if (s.charAt(2) != ' ' || s.charAt(4) != ' ' || s.charAt(6) != ' ' || s.charAt(8) != ' ') {
+                    return false;
                 }
-                writer.newLine();
+                if (s.length() != 9) {
+                    return false;
+                }
+            } else {
+                if (s.length() != 8) {
+                    return false;
+                }
             }
-
-
+            linenumber++;//循环回合数++
         }
+        return true;
     }
 
-    public void Reader(ArrayList<Step> steps) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\DELL\\IdeaProjects\\Store"));
-        int linenumber = 1;
+    public void Reader() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\DELL\\Desktop\\ChessDemo\\resource\\save1.txt"));
+        int linenumber = 0;//行数
+        int conveniece = 0;//帮助余数
         String s = null;
-        int conveniece = linenumber % 9;//帮助余数
-        int round = (linenumber - conveniece + 9) / 9;//代表第几轮
         while ((s = reader.readLine()) != null) {
-
-            if (conveniece == 1) {
+            conveniece = linenumber % 9;
+            int round = (linenumber - conveniece) / 9 + 1;//代表第几轮
+            if (conveniece == 0) {
                 steps.get(round - 1).initialX = s.charAt(0) - '0';
-                steps.get(round - 1).initialY = s.charAt(1) - '0';
-                steps.get(round - 1).laterX = s.charAt(2) - '0';
-                steps.get(round - 1).laterY = s.charAt(3) - '0';
+                steps.get(round - 1).initialY = s.charAt(2) - '0';
+                steps.get(round - 1).laterX = s.charAt(4) - '0';
+                steps.get(round - 1).laterY = s.charAt(6) - '0';
+                steps.get(round - 1).Round2 = s.charAt(8) - '0';
             } else {
-                steps.get(round - 1).laterChessboard[conveniece - 2][0] = s.charAt(0) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][1] = s.charAt(1) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][2] = s.charAt(2) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][3] = s.charAt(3) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][4] = s.charAt(4) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][5] = s.charAt(5) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][6] = s.charAt(6) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][7] = s.charAt(7) - '0';
+                steps.get(round - 1).laterChessboard[conveniece - 1][0] = s.charAt(0) - '0';
+                steps.get(round - 1).laterChessboard[conveniece - 1][1] = s.charAt(1) - '0';
+                steps.get(round - 1).laterChessboard[conveniece - 1][2] = s.charAt(2) - '0';
+                steps.get(round - 1).laterChessboard[conveniece - 1][3] = s.charAt(3) - '0';
+                steps.get(round - 1).laterChessboard[conveniece - 1][4] = s.charAt(4) - '0';
+                steps.get(round - 1).laterChessboard[conveniece - 1][5] = s.charAt(5) - '0';
+                steps.get(round - 1).laterChessboard[conveniece - 1][6] = s.charAt(6) - '0';
+                steps.get(round - 1).laterChessboard[conveniece - 1][7] = s.charAt(7) - '0';
 
             }
             linenumber++;//循环回合数++
         }
+    }
+
+    public void Writer(ArrayList<Step> steps) throws IOException {//存储
+        BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\DELL\\Desktop\\ChessDemo\\resource\\save1.txt"));
+        StringBuilder stringBuilder = new StringBuilder();
+        //遍历输出x,y,X,Y,chessBoardMatrix
+        for (int i = 0; i < steps.size(); i++) {
+            int x = steps.get(i).initialX;//后来的x
+            int y = steps.get(i).initialY;//....
+            int X = steps.get(i).laterX;//....
+            int Y = steps.get(i).laterY;
+            int round2 = steps.get(i).Round2;//....
+            int[][] chessBoardMatrix = steps.get(i).laterChessboard;//....
+            writer.write(x + '0');
+            writer.write(' ');
+            writer.write(y + '0');
+            writer.write(' ');
+            writer.write(X + '0');
+            writer.write(' ');
+            writer.write(Y + '0');
+            writer.write(' ');
+            writer.write(round2 + '0');
+            writer.newLine();
+            for (int j = 0; j < 8; j++) {
+                for (int k = 0; k < 8; k++) {
+                    writer.write((chessBoardMatrix[j][k]) + '0');//一行一行存
+                    //System.out.println("saved: "+(char) (chessBoardMatrix[j][k]+'0'));
+                }
+                writer.newLine();
+            }
+        }
+        writer.close();
     }
 
 
@@ -623,94 +662,7 @@ public class Chessboard extends JComponent {
             } else statusRound.setText("Round: " + Round + "  " + player2);
         }
         steps.remove(steps.size() - 1);
-        /*for (int k=steps.size()-1;k>=0;k--) {
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    System.out.print(steps.get(k).laterChessboard[i][j]);
-                }
-                System.out.println();
-            }
-        }*/
-
     }
-        /*if (steps.size() == 1) {
-            newGame();
-        } else {
-            int x = steps.get(steps.size() - 1).initialX;//最后一步（上一步）动的棋子移动之前的x坐标
-            int y = steps.get(steps.size() - 1).initialY;//最后一步（上一步）动的棋子移动之前的y坐标
-            int X = steps.get(steps.size() - 1).laterX;//最后一步（上一步）动的棋子移动之后的x坐标
-            int Y = steps.get(steps.size() - 1).laterY;//最后一步（上一步）动的棋子移动之后的y坐标
-            int[][] chessboardafter = steps.get(steps.size() - 2).laterChessboard;//最后一步之前的棋盘,倒数第二步的棋盘
-            int b = chessboardafter[x][y];//最后一步的挪动的那个棋子spacial
-            int after = chessboardafter[X][Y];//最后一步的目标棋子special
-            //把矩阵变成上一步
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    chessmatrix[i][j] = chessboardafter[i][j];
-                }
-            }
-
-
-            steps.remove(steps.size() - 1);
-
-            //开始把（x,y)处的棋子变回原位
-            if (b == 1 || b == 2 || b == 3 || b == 4 || b == 5 || b == 6 || b == 7 || b == 8) {
-                initWhitePawnOnBoard(X, Y, ChessColor.WHITE, b, 1);
-                System.out.println("AAAAA");
-            } else if (b == -1 || b == -2 || b == -3 || b == -4 || b == -5 || b == -6 || b == -7 || b == -8) {
-                initBlackPawnOnBoard(X, Y, ChessColor.BLACK, b, 1);
-            } else if (b == 9 || b == 10 || b == -9 || b == -10) {
-                if (b > 0) initRookOnBoard(X, Y, ChessColor.WHITE, b, 0);
-                else initRookOnBoard(X, Y, ChessColor.BLACK, b, 0);
-            } else if (b == 11 || b == 12 || b == -11 || b == -12) {
-                if (b > 0) initKnightOnBoard(X, Y, ChessColor.WHITE, b);
-                else initKnightOnBoard(X, Y, ChessColor.BLACK, b);
-            } else if (b == 13 || b == 14 || b == -13 || b == -14) {
-                if (b > 0) initBishopOnBoard(X, Y, ChessColor.WHITE, b);
-                else initBishopOnBoard(X, Y, ChessColor.BLACK, b);
-            } else if (b == 15 || b == -15) {
-                if (b > 0) initQueenOnBoard(X, Y, ChessColor.WHITE, b);
-                else initQueenOnBoard(X, Y, ChessColor.BLACK, b);
-            } else if (b == 16 || b == -16) {
-                if (b > 0) initKingOnBoard(X, Y, ChessColor.WHITE, b, 0);
-                else initKingOnBoard(X, Y, ChessColor.BLACK, b, 0);
-            }
-
-
-            //之后把（X,Y)处的棋子变回原位
-
-            System.out.println(b);
-            System.out.println(after);
-
-
-            if (after == 1 || after == 2 || after == 3 || after == 4 || after == 5 || after == 6 || after == 7 || after == 8) {
-                initWhitePawnOnBoard(x, y, ChessColor.WHITE, after, 1);
-            } else if (after == -1 || after == -2 || after == -3 || after == -4 || after == -5 || after == -6 || after == -7 || after == -8) {
-                initBlackPawnOnBoard(x, y, ChessColor.BLACK, after, 1);
-                System.out.println("BBBBBB");
-            } else if (after == 9 || after == 10 || after == -9 || after == -10) {
-                if (after > 0) initRookOnBoard(x, y, ChessColor.WHITE, after, 0);
-                else initRookOnBoard(x, y, ChessColor.BLACK, after, 0);
-            } else if (after == 11 || after == 12 || after == -11 || after == -12) {
-                if (after > 0) initKnightOnBoard(x, y, ChessColor.WHITE, after);
-                else initKnightOnBoard(x, y, ChessColor.BLACK, after);
-            } else if (after == 13 || after == 14 || after == -13 || after == -14) {
-                if (after > 0) initBishopOnBoard(x, y, ChessColor.WHITE, after);
-                else initBishopOnBoard(x, y, ChessColor.BLACK, after);
-            } else if (after == 15 || after == -15) {
-                if (after > 0) initQueenOnBoard(x, y, ChessColor.WHITE, after);
-                else initQueenOnBoard(x, y, ChessColor.BLACK, after);
-            } else if (after == 16 || after == -16) {
-                if (after > 0) initKingOnBoard(x, y, ChessColor.WHITE, after, 0);
-                else initKingOnBoard(x, y, ChessColor.BLACK, after, 0);
-            } else if (after == 0) {
-                ChessComponent chessComponentkong = new EmptySlotComponent(new ChessboardPoint(x, y), calculatePoint(x, y), clickController, CHESS_SIZE);
-                putChessOnBoard(chessComponentkong);
-                chessComponentkong.setVisible(true);
-            }
-            repaint();
-        }
-    }*/
 
     public void newGame() {
         Round = 1;
@@ -764,8 +716,8 @@ public class Chessboard extends JComponent {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (chessComponents[i][j].special == 16) {
-                    x=i;
-                    y=j;
+                    x = i;
+                    y = j;
                 }
             }
         }
@@ -786,8 +738,8 @@ public class Chessboard extends JComponent {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (chessComponents[i][j].special == 16) {
-                    x=i;
-                    y=j;
+                    x = i;
+                    y = j;
                 }
             }
         }
@@ -802,18 +754,8 @@ public class Chessboard extends JComponent {
         return false;
     }
 
-    /*//执行吃过路兵的操作
-    public void EatBlackRoadPawn(ChessboardPoint destination){
-        chessmatrix[destination.getX()+1][destination.getY()] = 0;
-        remove(chessComponents[destination.getX()+1][destination.getY()]);
-    }
-
-    public void EatWhiteRoadPawn(ChessboardPoint destination){
-        chessmatrix[destination.getX()-1][destination.getY()] = 0;
-        remove(chessComponents[destination.getX()-1][destination.getY()]);
-    }*/
-
     public boolean PeaceOne() {
+        return true;
 
     }
 
