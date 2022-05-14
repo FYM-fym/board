@@ -199,7 +199,6 @@ public class Chessboard extends JComponent {
 
             }
         });
-
     }
 
     public Chessboard(int width, int height, JLabel statusRound,JLabel time) {
