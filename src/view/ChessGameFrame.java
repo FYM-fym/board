@@ -9,18 +9,27 @@ import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * 这个类表示游戏过程中的整个游戏界面，是一切的载体
  */
 public class ChessGameFrame extends JFrame {
     //    public final Dimension FRAME_SIZE ;
-    private final int WIDTH;
-    private final int HEIGTH;
+    private  int WIDTH;
+    private  int HEIGTH;
     public final int CHESSBOARD_SIZE;
     private GameController gameController;
     Chessboard chessboard;
+    JLabel statusRound;
+    JLabel time;
+    JLabel statusLabel;
+    JButton button1;
+    JButton button2;
+    JButton button3;
+    JButton button4;
+
+
+
 
 
 
@@ -37,40 +46,37 @@ public class ChessGameFrame extends JFrame {
         setLayout(null);
 
 
-        addHelloButton();
+        changeSkin();
         addLoadButton();
         addRemake();
         addReturnButton();
 
-        JLabel statusRound = new JLabel("Round: 1  White" );
-        statusRound.setLocation(760, 760 / 10 +30);
+        statusRound = new JLabel("Round: 1  White" );
+        statusRound.setLocation(760, 106);
         statusRound.setSize(200, 60);
         statusRound.setFont(new Font("Rockwell", Font.BOLD, 20));
-        statusRound.setVisible(true);
         add(statusRound);
-        chessboard = new Chessboard(608,608,statusRound);
+
+        time = new JLabel("Time: ");
+        time.setBounds(760,760 / 10 +70,200,60);
+        time.setFont(new Font("Rockwell",Font.BOLD,20));
+        add(time);
+
+        chessboard = new Chessboard(608,608,statusRound,time);
         gameController = new GameController(chessboard);
         chessboard.setLocation(HEIGTH / 10, HEIGTH / 10);
         add(chessboard);
         addLabel();
-
     }
-    /**
-     * 在游戏面板中添加棋盘
-     */
-
-
-    /**
-     * 在游戏面板中添加标签
-     */
 
     public void addLabel() {
-        JLabel statusLabel = new JLabel(new ImageIcon("./images/background.jpeg"));
+        statusLabel = new JLabel(new ImageIcon("./images/background1.jpeg"));
         statusLabel.setLocation(0, 0);
         statusLabel.setSize(1000, 760);
         statusLabel.setOpaque(true);
         statusLabel.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(statusLabel);
+
     }
 
     /**
@@ -78,47 +84,68 @@ public class ChessGameFrame extends JFrame {
      */
 
     public void addRemake() {
-        JButton button = new JButton("新游戏");
-        button.addActionListener(e -> chessboard.newGame());
-        button.setLocation(HEIGTH, HEIGTH / 10 + 480);
-        button.setSize(200, 60);
-        button.setFont(new Font("Rockwell", Font.BOLD, 15));
-        add(button);
+        button1 = new JButton("新游戏");
+        button1.addActionListener(e -> chessboard.newGame());
+        button1.setLocation(760, 560);
+        button1.setSize(200, 61);
+        button1.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(button1);
     }
 
     public void addReturnButton(){
-        JButton button = new JButton("悔棋");
-        button.setSize(200,60);
-        button.setLocation(HEIGTH, HEIGTH / 10 + 400);
-        button.setFont(new Font("Rockwell", Font.BOLD, 20));
+        button2 = new JButton("悔棋");
+        button2.setSize(200,60);
+        button2.setLocation(760, 476);
+        button2.setFont(new Font("Rockwell", Font.BOLD, 20));
 
-        button.addActionListener(new ActionListener() {
+        button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(222);
-                chessboard.remake(chessboard.steps);
-                System.out.println(333);
+                chessboard.remake(Chessboard.steps);
+
             }
         });
-        add(button);
+        add(button2);
     }
 
-    private void addHelloButton() {
-        JButton button = new JButton("Show Hello Here");
-        button.addActionListener((e) -> JOptionPane.showMessageDialog(this, "Hello, world!"));
-        button.setLocation(HEIGTH, HEIGTH / 10 + 120);
-        button.setSize(200, 60);
-        button.setFont(new Font("Rockwell", Font.BOLD, 20));
-        add(button);
+    /*public void painting(Graphics g){
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (i % 2 == 0 && j % 2 == 0){
+                    chessboard.draw(g).setColor(Color.cyan);
+                    chessboard.draw(g).fillRoundRect(200,200,50,50,40,40);
+                }else {
+                    chessboard.draw(g).setColor(Color.BLACK);
+                    chessboard.draw(g).fillRoundRect(100,100,50,50,40,40);
+                }
+            }
+        }
+    }*/
+
+    private void changeSkin() {
+        button3 = new JButton("切换皮肤");
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                statusLabel.setIcon(new ImageIcon("./images/background2.jpeg"));
+                /*painting(chessboard.draw(chessboard.g));*/
+                repaint();
+            }
+        });
+        button3.setLocation(760, 236);
+        button3.setSize(200, 60);
+        button3.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(button3);
     }
 
     private void addLoadButton() {
-        JButton button = new JButton("Load");
-        button.setLocation(HEIGTH, HEIGTH / 10 + 240);
-        button.setSize(200, 60);
-        button.setFont(new Font("Rockwell", Font.BOLD, 20));
-        add(button);
-        button.addActionListener(e -> {
+        button4 = new JButton("Load");
+        button4.setLocation(760, 316);
+        button4.setSize(200, 60);
+        button4.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(button4);
+        button4.addActionListener(e -> {
             System.out.println("Click load");
             String path = JOptionPane.showInputDialog(this, "Input Path here");
             BufferedWriter writer = null;
@@ -207,9 +234,6 @@ public class ChessGameFrame extends JFrame {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-
-
-
         });
     }
 }

@@ -16,6 +16,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,7 @@ public class Chessboard extends JComponent {
     private ChessColor currentColor = ChessColor.BLACK;
     //all chessComponents in this chessboard are shared only one model controller
     private final ClickController clickController = new ClickController(this);
-    private final int CHESS_SIZE;
+    private  int CHESS_SIZE;
     public int Round = 1;
     public int Round2 = 2;
     public int[][] chessmatrix = new int[8][8];
@@ -48,9 +50,19 @@ public class Chessboard extends JComponent {
     String player1 = "White";
     String player2 = "Black";
     JLabel statusRound;
+    JLabel time;
+    Timer timer1;
+    Timer timer2;
+    Timer timer3;
+    long during;
+    int count = 0;
+    long count0;
+    Graphics g;
 
-
-
+    public Graphics draw (Graphics g){
+        super.paintComponent(g);
+        return g;
+    };
     public static void main(String[] args) {
         JFrame f = new JFrame("2022 CS102A Project Demo");
         f.setSize(1000, 760);
@@ -61,13 +73,14 @@ public class Chessboard extends JComponent {
         c.setBackground(Color.WHITE);
         c.setLayout(null);
 
+
         JLabel title =new JLabel("国际象棋");
-        title.setBounds(620,30,250,80);
+        title.setBounds(620,30, 250, 80);
         title.setFont(new Font("国际象棋",Font.BOLD,60));
         c.add(title);
 
         JLabel label = new JLabel(new ImageIcon("./images/horse.jpg"));
-        label.setBounds(-190, 0, f.getWidth()-200, f.getHeight());
+        label.setBounds(-190, 0, 800, 760);
         label.setFont(new Font("Rockwell", Font.BOLD, 20));
         label.setOpaque(true);
         c.add(label);
@@ -88,14 +101,111 @@ public class Chessboard extends JComponent {
                 SwingUtilities.invokeLater(() -> {
                     ChessGameFrame mainFrame = new ChessGameFrame(1000, 760);
                     mainFrame.setVisible(true);
+                    mainFrame.addComponentListener(new ComponentListener() {
+                        @Override
+                        public void componentResized(ComponentEvent e) {
+                            Dimension d = mainFrame.getSize();
+                            mainFrame.chessboard.setBounds(d.height/10,d.height/10,608*d.width/1000,608*d.height/760);
+                            mainFrame.chessboard.CHESS_SIZE=Math.min(d.height/10,d.width/13);
+                            mainFrame.chessboard.repaint();
+                            mainFrame.chessboard.initiateEmptyChessboard();
+                            mainFrame.chessboard.initRookOnBoard(0, 0, ChessColor.BLACK, -9, 0);
+                            mainFrame.chessboard.initRookOnBoard(0, CHESSBOARD_SIZE - 1, ChessColor.BLACK, -10, 0);
+                            mainFrame.chessboard.initRookOnBoard(CHESSBOARD_SIZE - 1, 0, ChessColor.WHITE, 9, 0);
+                            mainFrame.chessboard.initRookOnBoard(CHESSBOARD_SIZE - 1, CHESSBOARD_SIZE - 1, ChessColor.WHITE, 10, 0);
+                            mainFrame.chessboard.initBishopOnBoard(0, 2, ChessColor.BLACK, -13);
+                            mainFrame.chessboard.initBishopOnBoard(0, CHESSBOARD_SIZE - 3, ChessColor.BLACK, -14);
+                            mainFrame.chessboard.initBishopOnBoard(CHESSBOARD_SIZE - 1, 2, ChessColor.WHITE, 13);
+                            mainFrame.chessboard.initBishopOnBoard(CHESSBOARD_SIZE - 1, CHESSBOARD_SIZE - 3, ChessColor.WHITE, 14);
+                            mainFrame.chessboard.initKnightOnBoard(0, 1, ChessColor.BLACK, -11);
+                            mainFrame.chessboard.initKnightOnBoard(0, CHESSBOARD_SIZE - 2, ChessColor.BLACK, -12);
+                            mainFrame.chessboard.initKnightOnBoard(CHESSBOARD_SIZE - 1, 1, ChessColor.WHITE, 11);
+                            mainFrame.chessboard.initKnightOnBoard(CHESSBOARD_SIZE - 1, CHESSBOARD_SIZE - 2, ChessColor.WHITE, 12);
+                            mainFrame.chessboard.initKingOnBoard(0, 4, ChessColor.BLACK, -16, 0);
+                            mainFrame.chessboard.initKingOnBoard(7, 4, ChessColor.WHITE, 16, 0);
+                            mainFrame.chessboard.initQueenOnBoard(0, 3, ChessColor.BLACK, -15);
+                            mainFrame.chessboard.initQueenOnBoard(7, 3, ChessColor.WHITE, 15);
+                            mainFrame.chessboard.initBlackPawnOnBoard(1, 0, ChessColor.BLACK, -1, 0);
+                            mainFrame.chessboard.initBlackPawnOnBoard(1, 1, ChessColor.BLACK, -2, 0);
+                            mainFrame.chessboard.initBlackPawnOnBoard(1, 2, ChessColor.BLACK, -3, 0);
+                            mainFrame.chessboard.initBlackPawnOnBoard(1, 3, ChessColor.BLACK, -4, 0);
+                            mainFrame.chessboard.initBlackPawnOnBoard(1, 4, ChessColor.BLACK, -5, 0);
+                            mainFrame.chessboard.initBlackPawnOnBoard(1, 5, ChessColor.BLACK, -6, 0);
+                            mainFrame.chessboard.initBlackPawnOnBoard(1, 6, ChessColor.BLACK, -7, 0);
+                            mainFrame.chessboard.initBlackPawnOnBoard(1, 7, ChessColor.BLACK, -8, 0);
+                            mainFrame.chessboard.initWhitePawnOnBoard(6, 0, ChessColor.WHITE, 1, 0);
+                            mainFrame.chessboard.initWhitePawnOnBoard(6, 1, ChessColor.WHITE, 2, 0);
+                            mainFrame.chessboard.initWhitePawnOnBoard(6, 2, ChessColor.WHITE, 3, 0);
+                            mainFrame.chessboard.initWhitePawnOnBoard(6, 3, ChessColor.WHITE, 4, 0);
+                            mainFrame.chessboard.initWhitePawnOnBoard(6, 4, ChessColor.WHITE, 5, 0);
+                            mainFrame.chessboard.initWhitePawnOnBoard(6, 5, ChessColor.WHITE, 6, 0);
+                            mainFrame.chessboard.initWhitePawnOnBoard(6, 6, ChessColor.WHITE, 7, 0);
+                            mainFrame.chessboard.initWhitePawnOnBoard(6, 7, ChessColor.WHITE, 8, 0);
+                            mainFrame.statusRound.setBounds(760*d.width/1000,106*d.height/760,d.width/5,60*d.height/760);
+                            mainFrame.statusRound.setFont(new Font("Rockwell", Font.BOLD, Math.min(20*d.width/1000,20*d.height/760)));
+                            mainFrame.time.setBounds(760*d.width/1000,146*d.height/760,d.width/5,60*d.height/760);
+                            mainFrame.time.setFont(new Font("Rockwell",Font.BOLD,Math.min(20*d.width/1000,20*d.height/760)));
+                            mainFrame.statusLabel.setBounds(0,0,d.width,d.height);
+                            mainFrame.button1.setBounds(760*d.width/1000,560*d.height/760,d.width/5,60*d.height/760);
+                            mainFrame.button1.setFont(new Font("Rockwell", Font.BOLD, Math.min(20*d.width/1000,20*d.height/760)));
+                            mainFrame.button2.setBounds(760*d.width/1000,476*d.height/760,d.width/5,60*d.height/760);
+                            mainFrame.button2.setFont(new Font("Rockwell", Font.BOLD, Math.min(20*d.width/1000,20*d.height/760)));
+                            mainFrame.button3.setBounds(760*d.width/1000,236*d.height/760,d.width/5,60*d.height/760);
+                            mainFrame.button3.setFont(new Font("Rockwell", Font.BOLD, Math.min(20*d.width/1000,20*d.height/760)));
+                            mainFrame.button4.setBounds(760*d.width/1000,316*d.height/760,d.width/5,60*d.height/760);
+                            mainFrame.button4.setFont(new Font("Rockwell", Font.BOLD, Math.min(20*d.width/1000,20*d.height/760)));
+                        }
+
+                        @Override
+                        public void componentMoved(ComponentEvent e) {
+
+                        }
+
+                        @Override
+                        public void componentShown(ComponentEvent e) {
+
+                        }
+
+                        @Override
+                        public void componentHidden(ComponentEvent e) {
+
+                        }
+                    });
                 });
+            }
+        });
+        f.addComponentListener(new ComponentListener() {
+            @Override//当窗口大小改变时
+            public void componentResized(ComponentEvent e) {
+                Dimension d = f.getSize();
+                title.setBounds(620*d.width/1000,30*d.height/760, d.width/4, d.height*80/760);
+                label.setBounds(-190*d.width/1000, 0, d.width*4/5, d.height);
+                read.setBounds(650*d.width/1000, 400*d.height/760, d.width/5, d.height*70/760);
+                a.setBounds(650*d.width/1000, 300*d.height/760, d.width/5, d.height*70/760);
+            }
+
+            @Override//当窗口位置改变时
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override//当窗口可见时
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override//当窗口不可见时
+            public void componentHidden(ComponentEvent e) {
+
             }
         });
 
     }
 
-    public Chessboard(int width, int height, JLabel statusRound) {
+    public Chessboard(int width, int height, JLabel statusRound,JLabel time) {
+        super.paintComponent(g);
         this.statusRound = statusRound;
+        this.time = time;
         setLayout(null); // Use absolute layout.
         setSize(width, height);
         CHESS_SIZE = width / 8;
@@ -157,7 +267,7 @@ public class Chessboard extends JComponent {
     }
 
 
-    public void swapChessComponents(ChessComponent chess1, ChessComponent chess2) {
+    public void swapChessComponents(ChessComponent chess1, ChessComponent chess2) throws InterruptedException {
         // Note that chess1 has higher priority, 'destroys' chess2 if exists.
         if (!(chess2 instanceof EmptySlotComponent)) {
             remove(chess2);
@@ -189,7 +299,71 @@ public class Chessboard extends JComponent {
             statusRound.setText("Round: " + Round + "  " + player1);
         }
 
-        System.out.println(Round + "AAAAAAAAAAAAA" + Round2);
+
+        if (count==1){
+            timer1.stop();
+        }
+        if (count==2){
+            timer2.stop();
+        }
+        if (count==3){
+            timer3.stop();
+        }
+            count0 = System.currentTimeMillis();
+        timer1 = new Timer(1000,e -> {
+            during = System.currentTimeMillis()-count0;
+            count = 1;
+            time.setText("Time: "+(11-during / 1000) + "s");
+            if ((11-during / 1000) == 0){
+                swapColor();
+                Round2++;
+                Round = Round2 / 2;
+                if (Round2 % 2 == 1) {
+                    statusRound.setText("Round: " + Round + "  " + player2);
+                } else {
+                    statusRound.setText("Round: " + Round + "  " + player1);
+                }
+                timer1.stop();
+                count0 = System.currentTimeMillis();
+                timer2 = new Timer(1000,e1 -> {
+                    during = System.currentTimeMillis()-count0;
+                    count = 2;
+                    time.setText("Time: "+(11-during / 1000) + "s");
+                    if ((11-during / 1000) == 0){
+                        swapColor();
+                        Round2++;
+                        Round = Round2 / 2;
+                        if (Round2 % 2 == 1) {
+                            statusRound.setText("Round: " + Round + "  " + player2);
+                        } else {
+                            statusRound.setText("Round: " + Round + "  " + player1);
+                        }
+                        timer2.stop();
+                        count0 = System.currentTimeMillis();
+                        timer3 = new Timer(1000,e2 -> {
+                            during = System.currentTimeMillis()-count0;
+                            count = 3;
+                            time.setText("Time: "+(11-during / 1000) + "s");
+                            if ((11-during / 1000) == 0){
+                                swapColor();
+                                Round2++;
+                                Round = Round2 / 2;
+                                if (Round2 % 2 == 1) {
+                                    statusRound.setText("Round: " + Round + "  " + player2);
+                                } else {
+                                    statusRound.setText("Round: " + Round + "  " + player1);
+                                }
+                                timer3.stop();
+                            }
+                        });
+                        timer3.start();
+                    }
+                });
+                timer2.start();
+            }
+        });
+        timer1.start();
+
 
 //兵的升变，在这里实现
         int x;
@@ -436,7 +610,6 @@ public class Chessboard extends JComponent {
 
     }
 
-
     private Point calculatePoint(int row, int col) {
         return new Point(col * CHESS_SIZE, row * CHESS_SIZE);
     }
@@ -566,6 +739,50 @@ public class Chessboard extends JComponent {
 
 
     public void remake(ArrayList<Step> steps) {
+        if (count==1){
+            timer1.stop();
+        }
+        if (count==2){
+            timer2.stop();
+        }
+        if (count==3){
+            timer3.stop();
+        }
+        count0 = System.currentTimeMillis();
+        timer1 = new Timer(1000,e -> {
+            during = System.currentTimeMillis()-count0;
+            count = 1;
+            time.setText("Time: "+(11-during / 1000) + "s");
+            if ((11-during / 1000) == 0){
+                swapColor();
+                timer1.stop();
+                count0 = System.currentTimeMillis();
+                timer2 = new Timer(1000,e1 -> {
+                    during = System.currentTimeMillis()-count0;
+                    count = 2;
+                    time.setText("Time: "+(11-during / 1000) + "s");
+                    if ((11-during / 1000) == 0){
+                        swapColor();
+                        timer2.stop();
+                        count0 = System.currentTimeMillis();
+                        timer3 = new Timer(1000,e2 -> {
+                            during = System.currentTimeMillis()-count0;
+                            count = 3;
+                            time.setText("Time: "+(11-during / 1000) + "s");
+                            if ((11-during / 1000) == 0){
+                                swapColor();
+                                timer3.stop();
+                            }
+                        });
+                        timer3.start();
+                    }
+                });
+                timer2.start();
+            }
+        });
+        timer1.start();
+
+
         if (steps.size() == 1) {
             newGame();
             repaint();
@@ -735,6 +952,16 @@ public class Chessboard extends JComponent {
         Round2 = 2;
         statusRound.setText("Round: 1  White");
         currentColor = ChessColor.WHITE;
+        if (count==1){
+            timer1.stop();
+        }
+        if (count==2){
+            timer2.stop();
+        }
+        if (count==3){
+            timer3.stop();
+        }
+        time.setText("Time: ");
 
         //都变成空棋子
         initiateEmptyChessboard();

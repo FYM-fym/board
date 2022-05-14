@@ -10,6 +10,8 @@ import view.Chessboard;
 import view.ChessboardPoint;
 import view.Step;
 import java.awt.*;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class ClickController {
@@ -17,13 +19,11 @@ public class ClickController {
     private ChessComponent first;
 
 
-
-
     public ClickController(Chessboard chessboard) {
         this.chessboard = chessboard;
     }
 
-    public void onClick(ChessComponent chessComponent) {
+    public void onClick(ChessComponent chessComponent) throws InterruptedException {
         if (first == null) {//选中的棋子是chessComponent，并且当前状态是没选中棋子
             if (handleFirst(chessComponent)) {
                 chessComponent.setSelected(true);
@@ -47,6 +47,7 @@ public class ClickController {
                 //repaint in swap chess method.
                 chessboard.swapChessMatrix(first,chessComponent);
                 chessboard.swapChessComponents(first, chessComponent);
+
                 chessboard.swapColor();
                 first.setSelected(false);
                 first = null;
