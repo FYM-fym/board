@@ -39,6 +39,7 @@ public abstract class ChessComponent extends JComponent {
     private boolean selected;
     public int special;
     public int WhetherFirst;
+    int number = 0;
     protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size, int special,int WhetherFirst) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);//允许鼠标点击
         setLocation(location);
@@ -100,6 +101,14 @@ public abstract class ChessComponent extends JComponent {
                 ex.printStackTrace();
             }
         }
+        if (e.getID() == MouseEvent.MOUSE_ENTERED){
+            number = 1;
+            paintComponent(getGraphics());
+        }
+        if (e.getID() == MouseEvent.MOUSE_EXITED){
+            number = 2;
+            paintComponent(getGraphics());
+        }
     }
     /**
      * @param chessboard  棋盘
@@ -122,11 +131,21 @@ public abstract class ChessComponent extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponents(g);
-        System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
-        Color squareColor = BACKGROUND_COLORS[(chessboardPoint.getX() + chessboardPoint.getY()) % 2];
-        g.setColor(squareColor);
-        g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),40,40);
+        if (number == 1){
+            g.setColor(Color.GREEN);
+            g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),40,40);
+        }else if (number == 2){
+            Color squareColor = BACKGROUND_COLORS[(chessboardPoint.getX() + chessboardPoint.getY()) % 2];
+            g.setColor(squareColor);
+            g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),40,40);
+        }else {
+            System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
+            Color squareColor = BACKGROUND_COLORS[(chessboardPoint.getX() + chessboardPoint.getY()) % 2];
+            g.setColor(squareColor);
+            g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),40,40);
+        }
     }
+
 }
 
 

@@ -20,18 +20,9 @@ public class ChessGameFrame extends JFrame {
     public final int CHESSBOARD_SIZE;
     private GameController gameController;
     Chessboard chessboard;
-    JLabel statusRound;
-    JLabel time;
-    JLabel statusLabel;
-    JButton button1;
-    JButton button2;
-    JButton button3;
-    JButton button4;
+    JLabel statusRound, time, statusLabel;
+    JButton button1, button2, button3, button4;
     int counter = 1;
-
-
-
-
 
 
     public ChessGameFrame(int width, int height) {
@@ -123,6 +114,9 @@ public class ChessGameFrame extends JFrame {
             }
         }
     }*/
+    public void reader(){
+
+    }
 
     private void changeSkin() {
         button3 = new JButton("切换皮肤");
@@ -159,6 +153,15 @@ public class ChessGameFrame extends JFrame {
         button4.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button4);
         button4.addActionListener(e -> {
+            if (chessboard.count==1){
+                chessboard.timer1.stop();
+            }
+            if (chessboard.count==2){
+                chessboard.timer2.stop();
+            }
+            if (chessboard.count==3){
+                chessboard.timer3.stop();
+            }
             System.out.println("Click load");
             String path = JOptionPane.showInputDialog(this, "Input Path here");
             BufferedWriter writer = null;
@@ -181,41 +184,25 @@ public class ChessGameFrame extends JFrame {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                try {
-                    writer.write(' ');
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+
                 try {
                     writer.write(y + '0');
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                try {
-                    writer.write(' ');
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+
                 try {
                     writer.write(X + '0');
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                try {
-                    writer.write(' ');
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+
                 try {
                     writer.write(Y + '0');
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                try {
-                    writer.write(' ');
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+
                 try {
                     writer.write(round2 + '0');
                 } catch (IOException ex) {

@@ -21,6 +21,7 @@ import java.awt.event.ComponentListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * 这个类表示面板上的棋盘组件对象
@@ -49,15 +50,20 @@ public class Chessboard extends JComponent {
     public static ArrayList<Step> steps = new ArrayList<>();
     String player1 = "White";
     String player2 = "Black";
-    JLabel statusRound;
-    JLabel time;
-    Timer timer1;
-    Timer timer2;
-    Timer timer3;
-    long during;
+    JLabel statusRound, time;
+    Timer timer1, timer2, timer3;
+    long during, count0;
     int count = 0;
-    long count0;
     Graphics g;
+    static String reading, writing;
+    static ChessGameFrame record;
+    static BufferedReader reader;
+    public int whiteKingDanger = 0;
+    public int blackKingDanger = 0;
+    public boolean lastBlackKingDanger = false;
+    public boolean lastWhiteKingDanger = false;
+
+
 
     public Graphics draw (Graphics g){
         super.paintComponent(g);
@@ -88,6 +94,90 @@ public class Chessboard extends JComponent {
         JButton read = new JButton("读取存档");
         read.setBounds(650, 400, 200, 70);
         read.setFont(new Font("Rockwell", Font.BOLD, 20));
+        read.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    reading = JOptionPane.showInputDialog(null, "Input Path here");
+                    reader = new BufferedReader(new FileReader(reading));
+                    System.out.println(reading);
+                    f.dispose();
+                    record = new ChessGameFrame(1000, 760);
+                    record.setVisible(true);
+                    record.chessboard.initiateEmptyChessboard();
+                    Reader(Chessboard.steps);
+                    record.addComponentListener(new ComponentListener() {
+                        @Override
+                        public void componentResized(ComponentEvent e) {
+                            Dimension d = record.getSize();
+                            record.chessboard.setBounds(d.height/10,d.height/10,608*d.width/1000,608*d.height/760);
+                            record.chessboard.CHESS_SIZE=Math.min(d.height/10,d.width/13);
+                            record.chessboard.repaint();
+                            int b = 0;
+                            for (int i = 0; i < 8; i++) {
+                                for (int j = 0; j < 8; j++) {
+                                    b = Chessboard.steps.get(Chessboard.steps.size()-1).laterChessboard[i][j];
+                                    if (b == 1 || b == 2 || b == 3 || b == 4 || b == 5 || b == 6 || b == 7 || b == 8) {
+                                        record .chessboard.initWhitePawnOnBoard(i, j, ChessColor.WHITE, b, 0);
+                                    } else if (b == -1 || b == -2 || b == -3 || b == -4 || b == -5 || b == -6 || b == -7 || b == -8) {
+                                        record .chessboard.initBlackPawnOnBoard(i, j, ChessColor.BLACK, b, 0);
+                                    } else if (b == 9 || b == 10 || b == -9 || b == -10) {
+                                        if (b > 0) record .chessboard.initRookOnBoard(i, j, ChessColor.WHITE, b, 0);
+                                        else record .chessboard.initRookOnBoard(i, j, ChessColor.BLACK, b, 0);
+                                    } else if (b == 11 || b == 12 || b == -11 || b == -12) {
+                                        if (b > 0) record .chessboard.initKnightOnBoard(i, j, ChessColor.WHITE, b);
+                                        else record .chessboard.initKnightOnBoard(i, j, ChessColor.BLACK, b);
+                                    } else if (b == 13 || b == 14 || b == -13 || b == -14) {
+                                        if (b > 0) record .chessboard.initBishopOnBoard(i, j, ChessColor.WHITE, b);
+                                        else record .chessboard.initBishopOnBoard(i, j, ChessColor.BLACK, b);
+                                    } else if (b == 15 || b == -15) {
+                                        if (b > 0) record .chessboard.initQueenOnBoard(i, j, ChessColor.WHITE, b);
+                                        else record .chessboard.initQueenOnBoard(i, j, ChessColor.BLACK, b);
+                                    } else if (b == 16 || b == -16) {
+                                        if (b > 0) record .chessboard.initKingOnBoard(i, j, ChessColor.WHITE, b, 0);
+                                        else record .chessboard.initKingOnBoard(i, j, ChessColor.BLACK, b, 0);
+                                    } else if (b == 0) {
+                                        record .chessboard.initiateEmptyChessboard(i, j);
+                                    }
+                                }
+                            }
+                            record.chessboard.repaint();
+                            record.statusRound.setBounds(760*d.width/1000,106*d.height/760,d.width/5,60*d.height/760);
+                            record.statusRound.setFont(new Font("Rockwell", Font.BOLD, Math.min(20*d.width/1000,20*d.height/760)));
+                            record.time.setBounds(760*d.width/1000,146*d.height/760,d.width/5,60*d.height/760);
+                            record.time.setFont(new Font("Rockwell",Font.BOLD,Math.min(20*d.width/1000,20*d.height/760)));
+                            record.statusLabel.setBounds(0,0,d.width,d.height);
+                            record.button1.setBounds(760*d.width/1000,560*d.height/760,d.width/5,60*d.height/760);
+                            record.button1.setFont(new Font("Rockwell", Font.BOLD, Math.min(20*d.width/1000,20*d.height/760)));
+                            record.button2.setBounds(760*d.width/1000,476*d.height/760,d.width/5,60*d.height/760);
+                            record.button2.setFont(new Font("Rockwell", Font.BOLD, Math.min(20*d.width/1000,20*d.height/760)));
+                            record.button3.setBounds(760*d.width/1000,236*d.height/760,d.width/5,60*d.height/760);
+                            record.button3.setFont(new Font("Rockwell", Font.BOLD, Math.min(20*d.width/1000,20*d.height/760)));
+                            record.button4.setBounds(760*d.width/1000,316*d.height/760,d.width/5,60*d.height/760);
+                            record.button4.setFont(new Font("Rockwell", Font.BOLD, Math.min(20*d.width/1000,20*d.height/760)));
+                        }
+
+                        @Override
+                        public void componentMoved(ComponentEvent e) {
+
+                        }
+
+                        @Override
+                        public void componentShown(ComponentEvent e) {
+
+                        }
+
+                        @Override
+                        public void componentHidden(ComponentEvent e) {
+
+                        }
+                    });
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
         c.add(read);
 
         JButton a = new JButton("开始游戏");
@@ -497,7 +587,18 @@ public class Chessboard extends JComponent {
             }
             System.out.println();
         }
-
+        if(PeaceOneWhite() || PeaceOneBlack() || PeaceTwo()){
+            JOptionPane.showMessageDialog(null,"和棋","和棋",JOptionPane.ERROR_MESSAGE);
+            newGame();
+        }
+        if (WhiteDead()) {
+            JOptionPane.showMessageDialog(null, "白王被将死，黑方获胜", "结束", JOptionPane.ERROR_MESSAGE);
+            newGame();
+        }
+        if (BlackDead()){
+            JOptionPane.showMessageDialog(null, "黑王被将死，白方获胜", "结束", JOptionPane.ERROR_MESSAGE);
+            newGame();
+        }
     }
 
     public void swapChessMatrix(ChessComponent chess1, ChessComponent chess2) {//chess1是一开始选中的，chess2 是当前选中的
@@ -681,9 +782,8 @@ public class Chessboard extends JComponent {
         return true;
     }
 
-
-    public void Writer(ArrayList<Step> steps) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\DELL\\IdeaProjects\\Store"));
+    public static void Writer(ArrayList<Step> steps) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter('"'+writing+'"'));
         StringBuilder stringBuilder = new StringBuilder();
         //遍历输出x,y,X,Y,chessBoardMatrix
         for (int i = 0; i < steps.size(); i++) {
@@ -708,35 +808,76 @@ public class Chessboard extends JComponent {
         }
     }
 
-    public void Reader(ArrayList<Step> steps) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\DELL\\IdeaProjects\\Store"));
-        int linenumber = 1;
+    public static void Reader(ArrayList<Step> steps) throws IOException {
+        /*BufferedReader reader = new BufferedReader(new FileReader(reading));*/
+        int linenumber = 0;
         String s = null;
-        int conveniece = linenumber % 9;//帮助余数
-        int round = (linenumber - conveniece + 9) / 9;//代表第几轮
+        int conveniece ;
+        int round = 0;
+        Chessboard.steps = new ArrayList<>();
         while ((s = reader.readLine()) != null) {
+            conveniece = linenumber % 9;//帮助余数
+            round = (linenumber - conveniece+9) / 9;//代表第几轮
+            if (conveniece == 0) {
+                Chessboard.steps.add(new Step(0,0,0,0,new int[8][8],0));
+                Chessboard.steps.get(round - 1).initialX = s.charAt(0) - '0';
+                Chessboard.steps.get(round - 1).initialY = s.charAt(1) - '0';
+                Chessboard.steps.get(round - 1).laterX = s.charAt(2) - '0';
+                Chessboard.steps.get(round - 1).laterY = s.charAt(3) - '0';
+                Chessboard.steps.get(round-1).Round2 = s.charAt(4) - '0';
 
-            if (conveniece == 1) {
-                steps.get(round - 1).initialX = s.charAt(0) - '0';
-                steps.get(round - 1).initialY = s.charAt(1) - '0';
-                steps.get(round - 1).laterX = s.charAt(2) - '0';
-                steps.get(round - 1).laterY = s.charAt(3) - '0';
+
+                System.out.println(Chessboard.steps.get(round-1).Round2);
+                record.chessboard.Round = Chessboard.steps.get(round-1).Round2 / 2;
+                if (Chessboard.steps.get(Chessboard.steps.size()-1).Round2 % 2 == 1) {
+                    record.chessboard.statusRound.setText("Round: " + record.chessboard.Round + "  " + record.chessboard.player2);
+                } else {
+                    record.chessboard.statusRound.setText("Round: " + record.chessboard.Round + "  " + record.chessboard.player1);
+                }
+
+
             } else {
-                steps.get(round - 1).laterChessboard[conveniece - 2][0] = s.charAt(0) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][1] = s.charAt(1) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][2] = s.charAt(2) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][3] = s.charAt(3) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][4] = s.charAt(4) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][5] = s.charAt(5) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][6] = s.charAt(6) - '0';
-                steps.get(round - 1).laterChessboard[conveniece - 2][7] = s.charAt(7) - '0';
-
+                Chessboard.steps.get(round - 1).laterChessboard[conveniece - 1][0] = s.charAt(0) - '0';
+                Chessboard.steps.get(round - 1).laterChessboard[conveniece - 1][1] = s.charAt(1) - '0';
+                Chessboard.steps.get(round - 1).laterChessboard[conveniece - 1][2] = s.charAt(2) - '0';
+                Chessboard.steps.get(round - 1).laterChessboard[conveniece - 1][3] = s.charAt(3) - '0';
+                Chessboard.steps.get(round - 1).laterChessboard[conveniece - 1][4] = s.charAt(4) - '0';
+                Chessboard.steps.get(round - 1).laterChessboard[conveniece - 1][5] = s.charAt(5) - '0';
+                Chessboard.steps.get(round - 1).laterChessboard[conveniece - 1][6] = s.charAt(6) - '0';
+                Chessboard.steps.get(round - 1).laterChessboard[conveniece - 1][7] = s.charAt(7) - '0';
             }
             linenumber++;//循环回合数++
         }
+
+        int b=0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                b = Chessboard.steps.get(Chessboard.steps.size()-1).laterChessboard[i][j];
+                if (b == 1 || b == 2 || b == 3 || b == 4 || b == 5 || b == 6 || b == 7 || b == 8) {
+                    record.chessboard.initWhitePawnOnBoard(i, j, ChessColor.WHITE, b, 0);
+                } else if (b == -1 || b == -2 || b == -3 || b == -4 || b == -5 || b == -6 || b == -7 || b == -8) {
+                    record.chessboard.initBlackPawnOnBoard(i, j, ChessColor.BLACK, b, 0);
+                } else if (b == 9 || b == 10 || b == -9 || b == -10) {
+                    if (b > 0) record.chessboard.initRookOnBoard(i, j, ChessColor.WHITE, b, 0);
+                    else record.chessboard.initRookOnBoard(i, j, ChessColor.BLACK, b, 0);
+                } else if (b == 11 || b == 12 || b == -11 || b == -12) {
+                    if (b > 0) record.chessboard.initKnightOnBoard(i, j, ChessColor.WHITE, b);
+                    else record.chessboard.initKnightOnBoard(i, j, ChessColor.BLACK, b);
+                } else if (b == 13 || b == 14 || b == -13 || b == -14) {
+                    if (b > 0) record.chessboard.initBishopOnBoard(i, j, ChessColor.WHITE, b);
+                    else record.chessboard.initBishopOnBoard(i, j, ChessColor.BLACK, b);
+                } else if (b == 15 || b == -15) {
+                    if (b > 0) record.chessboard.initQueenOnBoard(i, j, ChessColor.WHITE, b);
+                    else record.chessboard.initQueenOnBoard(i, j, ChessColor.BLACK, b);
+                } else if (b == 16 || b == -16) {
+                    if (b > 0) record.chessboard.initKingOnBoard(i, j, ChessColor.WHITE, b, 0);
+                    else record.chessboard.initKingOnBoard(i, j, ChessColor.BLACK, b, 0);
+                } else if (b == 0) {
+                    record.chessboard.initiateEmptyChessboard(i, j);
+                }
+            }
+        }
     }
-
-
     public void remake(ArrayList<Step> steps) {
         if (count==1){
             timer1.stop();
@@ -1001,7 +1142,6 @@ public class Chessboard extends JComponent {
         repaint();
     }
 
-
     public boolean WhiteKingDanger(ChessComponent[][] chessComponents) {
         int x = 0;
         int y = 0;
@@ -1046,20 +1186,410 @@ public class Chessboard extends JComponent {
         return false;
     }
 
-    /*//执行吃过路兵的操作
-    public void EatBlackRoadPawn(ChessboardPoint destination){
-        chessmatrix[destination.getX()+1][destination.getY()] = 0;
-        remove(chessComponents[destination.getX()+1][destination.getY()]);
+
+    public boolean PeaceOneWhite() {//白王连续被将军，连续4次将军判和。
+        if (WhiteKingDanger(chessComponents)) {
+            if (lastWhiteKingDanger) {
+                whiteKingDanger++;
+            } else {
+                whiteKingDanger = 0;
+            }
+            lastWhiteKingDanger = true;
+        }
+        if (whiteKingDanger == 3) {
+            return true;
+        } else return false;
     }
 
-    public void EatWhiteRoadPawn(ChessboardPoint destination){
-        chessmatrix[destination.getX()-1][destination.getY()] = 0;
-        remove(chessComponents[destination.getX()-1][destination.getY()]);
+    public boolean PeaceOneBlack() {//黑王连续被将军，连续4次判和。
+        if (BlackKingDanger(chessComponents)) {
+            if (lastBlackKingDanger) {
+                blackKingDanger++;
+            } else {
+                blackKingDanger = 0;
+            }
+            lastBlackKingDanger = true;
+        }
+        if (blackKingDanger == 3) {
+            return true;
+        } else return false;
+    }
+
+    public boolean PeaceTwo() {//重复棋局超过4次
+        int box = 0;
+        for (int k = 0; k < steps.size() - 1; k++) {
+            boolean eaqul = true;
+            flag:
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (steps.get(steps.size() - 1).laterChessboard[i][j] != steps.get(k).laterChessboard[i][j]) {
+                        eaqul = false;
+                        break flag;
+                    }
+                }
+            }
+            if (eaqul) {
+                box++;
+            }
+        }
+        if (box >= 3) {
+            return true;
+        } else return false;
+    }
+
+    /*public boolean PeaceThree() {//无子可动
+        boolean NoOneCanMove = false;
+        BigFlag:
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (chessComponents[i][j].special > 0) {
+                    boolean canmove = false;
+                    flag:
+                    for (int k = 0; k < 8; k++) {
+                        for (int l = 0; l < 8; l++) {
+                            if (chessComponents[i][j].canMoveTo(chessComponents, new ChessboardPoint(k, l))) {
+                                canmove = true;
+                                break flag;
+                            }
+                        }
+                    }
+                    if (canmove) {
+                        NoOneCanMove = true;
+                        break BigFlag;
+                    }
+                }
+            }
+        }
+        if (NoOneCanMove) {
+            return true;
+        } else return false;
     }*/
 
-    public boolean PeaceOne() {
-return true;
+    public boolean WhiteDead() {//return true 就说明王死了
+        //获取白色王的位置
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (chessComponents[i][j].special == 16) {
+                    x = i;
+                    y = j;
+                }
+            }
+        }//获取成功
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (chessComponents[i][j].canMoveTo(chessComponents, chessComponents[x][y].getChessboardPoint()) && chessComponents[i][j].special < 0 && (x != i || y != j)) {//i,j处的棋子可以吃x,y处的王
+
+                    //判断是否有棋子可以吃掉那个“刺客”
+                    int box = 0;
+                    for (int k = 0; k < 8; k++) {
+                        for (int l = 0; l < 8; l++) {
+                            if (chessComponents[k][l].canMoveTo(chessComponents, new ChessboardPoint(i, j)) && chessComponents[k][l].special > 0 && (k != i || l != j)) {
+                                box = 1;
+                            }
+                        }
+                    }
+
+
+                    if (box == 0) {//没人可以吃掉那个棋子的条件下
+
+                        //弄一个计数器
+                        int countnumber = 0;
+                        if ((x == 0 && y == 0) || (x == 7 && y == 0) || (x == 0 && y == 7) || (x == 7 && y == 7)) {
+                            countnumber = 3;
+                        } else if (x == 0 || y == 0 || x == 7 || y == 7) {
+                            countnumber = 5;
+                        } else {
+                            countnumber = 8;
+                        }
+
+
+
+                        if (x != 7) {//判断白王的下面是否能被吃
+                            flag1:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x + 1][y].getChessboardPoint()) && chessComponents[k][l].special < 0) {
+                                        countnumber--;
+                                        break flag1;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (y != 7) {//判断白王的右面是否能被吃
+                            flag2:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x][y + 1].getChessboardPoint()) && chessComponents[k][l].special < 0) {
+                                        countnumber--;
+                                        break flag2;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (x != 0) {//判断白王的上面是否能被吃
+                            flag3:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x - 1][y].getChessboardPoint()) && chessComponents[k][l].special < 0) {
+                                        countnumber--;
+                                        break flag3;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (y != 0) {//判断白王的左面是否能被吃
+                            flag4:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x][y - 1].getChessboardPoint()) && chessComponents[k][l].special < 0) {
+                                        countnumber--;
+                                        break flag4;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (x != 0 && y != 0) {//判断白王的左上面是否能被吃
+                            flag5:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x - 1][y - 1].getChessboardPoint()) && chessComponents[k][l].special < 0) {
+                                        countnumber--;
+                                        break flag5;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (x != 0 && y != 7) {//判断白王的右上面是否能被吃
+                            flag6:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x - 1][y + 1].getChessboardPoint()) && chessComponents[k][l].special < 0) {
+                                        countnumber--;
+                                        break flag6;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (x != 7 && y != 0) {//判断白王的左下面是否能被吃
+                            flag7:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x + 1][y - 1].getChessboardPoint()) && chessComponents[k][l].special < 0) {
+                                        countnumber--;
+                                        break flag7;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (x != 7 && y != 7) {//判断白王的右下面是否能被吃
+                            flag8:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x + 1][y + 1].getChessboardPoint()) && chessComponents[k][l].special < 0) {
+                                        countnumber--;
+                                        break flag8;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        //如果countnumber是0，那么白王走投无路￥￥￥$$$$$
+                        if (countnumber==0){
+                            return true;
+                        }
+
+
+
+                    }
+                }
+            }
+        }
+        return false;
     }
+
+    public boolean BlackDead() {//return true 就说明王死了
+        //获取白色王的位置
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (chessComponents[i][j].special == -16) {
+                    x = i;
+                    y = j;
+                }
+            }
+        }//获取成功
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (chessComponents[i][j].canMoveTo(chessComponents, chessComponents[x][y].getChessboardPoint()) && chessComponents[i][j].special > 0 && (x != i || y != j)) {//i,j处的棋子可以吃x,y处的王
+
+                    //判断是否有棋子可以吃掉那个“刺客”
+                    int box = 0;
+                    for (int k = 0; k < 8; k++) {
+                        for (int l = 0; l < 8; l++) {
+                            if (chessComponents[k][l].canMoveTo(chessComponents, new ChessboardPoint(i, j)) && chessComponents[k][l].special < 0 && (k != i || l != j)) {
+                                box = 1;
+                            }
+                        }
+                    }
+
+
+                    if (box == 0) {//没人可以吃掉那个棋子的条件下
+
+                        //弄一个计数器
+                        int countnumber = 0;
+                        if ((x == 0 && y == 0) || (x == 7 && y == 0) || (x == 0 && y == 7) || (x == 7 && y == 7)) {
+                            countnumber = 3;
+                        } else if (x == 0 || y == 0 || x == 7 || y == 7) {
+                            countnumber = 5;
+                        } else {
+                            countnumber = 8;
+                        }
+
+
+
+                        if (x != 7) {//判断黑王的下面是否能被吃
+                            flag1:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x + 1][y].getChessboardPoint()) && chessComponents[k][l].special > 0) {
+                                        countnumber--;
+                                        break flag1;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (y != 7) {//判断黑王的右面是否能被吃
+                            flag2:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x][y + 1].getChessboardPoint()) && chessComponents[k][l].special > 0) {
+                                        countnumber--;
+                                        break flag2;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (x != 0) {//判断黑王的上面是否能被吃
+                            flag3:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x - 1][y].getChessboardPoint()) && chessComponents[k][l].special > 0) {
+                                        countnumber--;
+                                        break flag3;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (y != 0) {//判断黑王的左面是否能被吃
+                            flag4:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x][y - 1].getChessboardPoint()) && chessComponents[k][l].special > 0) {
+                                        countnumber--;
+                                        break flag4;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (x != 0 && y != 0) {//判断黑王的左上面是否能被吃
+                            flag5:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x - 1][y - 1].getChessboardPoint()) && chessComponents[k][l].special > 0) {
+                                        countnumber--;
+                                        break flag5;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (x != 0 && y != 7) {//判断黑王的右上面是否能被吃
+                            flag6:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x - 1][y + 1].getChessboardPoint()) && chessComponents[k][l].special > 0) {
+                                        countnumber--;
+                                        break flag6;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (x != 7 && y != 0) {//判断黑王的左下面是否能被吃
+                            flag7:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x + 1][y - 1].getChessboardPoint()) && chessComponents[k][l].special > 0) {
+                                        countnumber--;
+                                        break flag7;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (x != 7 && y != 7) {//判断黑王的右下面是否能被吃
+                            flag8:
+                            for (int k = 0; k < 8; k++) {
+                                for (int l = 0; l < 8; l++) {
+                                    if (chessComponents[k][l].canMoveTo(chessComponents, chessComponents[x + 1][y + 1].getChessboardPoint()) && chessComponents[k][l].special > 0) {
+                                        countnumber--;
+                                        break flag8;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        //如果countnumber是0，那么黑王走投无路￥￥￥$$$$$
+                        if (countnumber==0){
+                            return true;
+                        }
+
+
+
+
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
 
 
 }

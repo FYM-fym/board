@@ -93,9 +93,9 @@ public class BishopChessComponent extends ChessComponent{
         if (isSelected()) { // Highlights the model if selected.
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    if (canMoveTo(chessboard.getChessComponents(),new ChessboardPoint(i,j) )){
+                    /*if (canMoveTo(ChessComponent[][] chessComponents, ChessboardPoint destination)){
                         System.out.println("123456789QWERTYUIOASDFGHJK");
-                    }
+                    }*/
                 }
             }
             g.setColor(Color.RED);
