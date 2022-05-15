@@ -2,7 +2,7 @@ package model;
 
 import controller.ClickController;
 import view.ChessboardPoint;
-
+import view.Chessboard;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +16,7 @@ public class BishopChessComponent extends ChessComponent{
 
     private static Image Bishop_WHITE;
     private static Image Bishop_BLACK;
-
+    public Chessboard chessboard;
     private Image BishopImage;
     /**
      * 读取加载车棋子的图片
@@ -91,6 +91,13 @@ public class BishopChessComponent extends ChessComponent{
         g.drawImage(BishopImage, 0, 0, getWidth() , getHeight(), this);
         g.setColor(Color.BLACK);
         if (isSelected()) { // Highlights the model if selected.
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (canMoveTo(chessboard.getChessComponents(),new ChessboardPoint(i,j) )){
+                        System.out.println("123456789QWERTYUIOASDFGHJK");
+                    }
+                }
+            }
             g.setColor(Color.RED);
             g.drawOval(0, 0, getWidth() , getHeight());
         }

@@ -27,6 +27,7 @@ public class ChessGameFrame extends JFrame {
     JButton button2;
     JButton button3;
     JButton button4;
+    int counter = 1;
 
 
 
@@ -128,8 +129,20 @@ public class ChessGameFrame extends JFrame {
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                statusLabel.setIcon(new ImageIcon("./images/background2.jpeg"));
-                /*painting(chessboard.draw(chessboard.g));*/
+                if (counter%4==1){
+                    statusLabel.setIcon(new ImageIcon("./images/background2.jpeg"));
+                    counter++;
+                }else if (counter%4==2){
+                    statusLabel.setIcon(new ImageIcon("./images/background3.jpeg"));
+                    counter++;
+                }else if (counter%4==3){
+                    statusLabel.setIcon(new ImageIcon("./images/background4.jpeg"));
+                    counter++;
+                }else if (counter%4==0){
+                    statusLabel.setIcon(new ImageIcon("./images/background1.jpeg"));
+                    counter++;
+                }
+
                 repaint();
             }
         });

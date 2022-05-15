@@ -51,16 +51,9 @@ public class ClickController {
                 chessboard.swapColor();
                 first.setSelected(false);
                 first = null;
-
-
-
-
-
-
             }
         }
     }
-
 
     //判断是否可以吃过路兵
     public int IfEatRoad(ChessComponent[][] chessComponents, ChessboardPoint destination,Chessboard chessboard){
@@ -83,11 +76,6 @@ public class ClickController {
         }
         return 3;
     }
-
-
-
-
-
     /*public boolean KingRookChange(ChessComponent chessComponent){
         if (chessComponent.getChessboardPoint().getX()==first.getX()){
             if (chessComponent instanceof EmptySlotComponent){
