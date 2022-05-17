@@ -62,6 +62,8 @@ public class Chessboard extends JComponent {
     public int blackKingDanger = 0;
     public boolean lastBlackKingDanger = false;
     public boolean lastWhiteKingDanger = false;
+    static public String name1,ID1,name2,ID2;
+    static public int head1,head2;
 
 
 
@@ -98,14 +100,28 @@ public class Chessboard extends JComponent {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+
+
                     reading = JOptionPane.showInputDialog(null, "Input Path here");
+                    reader = new BufferedReader(new FileReader(reading));
+                    if (!CheckEightEight()){
+                        JOptionPane.showMessageDialog(null,"棋盘不是8*8","读取错误",JOptionPane.ERROR_MESSAGE);
+                    }
+                    reader = new BufferedReader(new FileReader(reading));
+                    if (!CheckChessColor()){
+                        JOptionPane.showMessageDialog(null,"存入的不是黑白棋子","读取错误",JOptionPane.ERROR_MESSAGE);
+                    }
+                    reader = new BufferedReader(new FileReader(reading));
+                    if (!CheckRound()){
+                        JOptionPane.showMessageDialog(null,"缺少下一步行棋方","读取错误",JOptionPane.ERROR_MESSAGE);
+                    }
                     reader = new BufferedReader(new FileReader(reading));
                     System.out.println(reading);
                     f.dispose();
                     record = new ChessGameFrame(1000, 760);
                     record.setVisible(true);
                     record.chessboard.initiateEmptyChessboard();
-                    Reader(Chessboard.steps);
+                    Reader();
                     record.addComponentListener(new ComponentListener() {
                         @Override
                         public void componentResized(ComponentEvent e) {
@@ -187,6 +203,20 @@ public class Chessboard extends JComponent {
         a.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Icon[] icons = new Icon[3];
+                icons[0] = new ImageIcon("images/head1.png");
+                icons[1] = new ImageIcon("images/head2.png");
+                icons[2] = new ImageIcon("images/head3.png");
+                name1 = JOptionPane.showInputDialog(null, "Input Player1's name here");
+                ID1 = JOptionPane.showInputDialog(null, "Input Player1's ID here");
+                head1 = JOptionPane.showOptionDialog(null, "请选择玩家1的头像", "头像", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, icons, null);
+
+                name2 = JOptionPane.showInputDialog(null, "Input Player2's name here");
+                ID2 = JOptionPane.showInputDialog(null, "Input Player2's ID here");
+                head2 = JOptionPane.showOptionDialog(null, "请选择玩家1的头像", "头像", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, icons, null);
+
+
+
                 f.dispose();
                 SwingUtilities.invokeLater(() -> {
                     ChessGameFrame mainFrame = new ChessGameFrame(1000, 760);
@@ -719,6 +749,7 @@ public class Chessboard extends JComponent {
     }
 
 
+/*
     public boolean checkStep(ArrayList<Step> steps) {//需要进一步检查，吃过路兵和王车移位还有升变。
         int box = 0;
         //判断第一次行棋是否正确
@@ -781,6 +812,62 @@ public class Chessboard extends JComponent {
         }
         return true;
     }
+*/
+public static boolean CheckEightEight() throws IOException {//检查棋盘是否是8*8
+    int linenumber1 = 0;
+    String s = null;
+    int conveniece1;
+    while ((s = reader.readLine()) != null) {
+        conveniece1 = linenumber1 % 9;//帮助余数
+        if (conveniece1 != 0) {
+            if (s.length() != 8) {
+                return false;
+            }
+        }
+        linenumber1++;//循环回合数++
+    }
+    return true;
+}
+
+
+    public static boolean CheckChessColor() throws IOException {//检测是否存入的是黑白棋子
+        int linenumber = 0;
+        String s = null;
+        int conveniece;
+        while ((s = reader.readLine()) != null) {
+            conveniece = linenumber % 9;//帮助余数
+            if (conveniece != 0) {
+                for (int i = 0; i < 8; i++) {
+                    if ((s.charAt(i)-'0'>16)||(s.charAt(i)-'0'<-16)){
+                        return false;
+                    }
+                }
+            }
+            linenumber++;//循环回合数++
+        }
+        return true;
+    }
+
+
+
+    public static boolean CheckRound() throws IOException {//检测行棋方的存储
+        int linenumber = 0;
+        String s = null;
+        int conveniece;
+        while ((s = reader.readLine()) != null) {
+            conveniece = linenumber % 9;//帮助余数
+            if (conveniece == 0) {
+                if (s.length()!=5){
+                    return false;
+                }
+                if (s.charAt(4)==' '){
+                    return false;
+                }
+            }
+            linenumber++;//循环回合数++
+        }
+        return true;
+    }
 
     public static void Writer(ArrayList<Step> steps) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter('"'+writing+'"'));
@@ -808,7 +895,7 @@ public class Chessboard extends JComponent {
         }
     }
 
-    public static void Reader(ArrayList<Step> steps) throws IOException {
+    public static void Reader() throws IOException {
         /*BufferedReader reader = new BufferedReader(new FileReader(reading));*/
         int linenumber = 0;
         String s = null;
@@ -818,6 +905,9 @@ public class Chessboard extends JComponent {
         while ((s = reader.readLine()) != null) {
             conveniece = linenumber % 9;//帮助余数
             round = (linenumber - conveniece+9) / 9;//代表第几轮
+
+
+
             if (conveniece == 0) {
                 Chessboard.steps.add(new Step(0,0,0,0,new int[8][8],0));
                 Chessboard.steps.get(round - 1).initialX = s.charAt(0) - '0';
@@ -879,6 +969,19 @@ public class Chessboard extends JComponent {
         }
     }
     public void remake(ArrayList<Step> steps) {
+    if (lastBlackKingDanger){
+        lastBlackKingDanger=false;
+    }
+    if (lastWhiteKingDanger){
+        lastWhiteKingDanger=false;
+    }
+    if (whiteKingDanger>0){
+        whiteKingDanger--;
+    }
+    if (blackKingDanger>0){
+        blackKingDanger--;
+    }
+
         if (count==1){
             timer1.stop();
         }
@@ -1088,6 +1191,10 @@ public class Chessboard extends JComponent {
     }*/
 
     public void newGame() {
+        whiteKingDanger=0;
+        blackKingDanger=0;
+        lastWhiteKingDanger=false;
+        lastBlackKingDanger=false;
         Round = 1;
         Round2 = 2;
         statusRound.setText("Round: 1  White");

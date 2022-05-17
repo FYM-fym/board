@@ -58,7 +58,48 @@ public class ChessGameFrame extends JFrame {
         gameController = new GameController(chessboard);
         chessboard.setLocation(HEIGTH / 10, HEIGTH / 10);
         add(chessboard);
+
+        JLabel player2 = new JLabel("Player2 : "+Chessboard.name2);
+        player2.setBounds(20,0,200,30);
+        player2.setFont(new Font("Rockwell", Font.BOLD,20));
+        add(player2);
+        JLabel ID2 = new JLabel("ID : "+Chessboard.ID2);
+        ID2.setBounds(20,30,200,30);
+        ID2.setFont(new Font("Rockwell",Font.BOLD,20));
+        add(ID2);
+        JLabel player1 = new JLabel("Player1 : "+Chessboard.name1);
+        player1.setBounds(700,650,200,30);
+        player1.setFont(new Font("Rockwell", Font.BOLD,20));
+        add(player1);
+        JLabel ID1 = new JLabel("ID : "+Chessboard.ID1);
+        ID1.setBounds(700,680,200,30);
+        ID1.setFont(new Font("Rockwell",Font.BOLD,20));
+        add(ID1);
+        JLabel head1 = new JLabel();
+        head1.setBounds(850,635,150,80);
+        head1.setFont(new Font("Rockwell",Font.BOLD,20));
+        if (Chessboard.head1 == 0) {
+            head1.setIcon(new ImageIcon("./images/head1.png"));
+        } else if (Chessboard.head1 == 1) {
+            head1.setIcon(new ImageIcon("./images/head2.png"));
+        } else if (Chessboard.head1 == 2) {
+            head1.setIcon(new ImageIcon("./images/head3.png"));
+        }
+        add(head1);
+        JLabel head2 = new JLabel();
+        head2.setBounds(200,0,150,80);
+        head2.setFont(new Font("Rockwell",Font.BOLD,20));
+        if (Chessboard.head2 == 0) {
+            head2.setIcon(new ImageIcon("./images/head1.png"));
+        } else if (Chessboard.head2 == 1) {
+            head2.setIcon(new ImageIcon("./images/head2.png"));
+        } else if (Chessboard.head2 == 2) {
+            head2.setIcon(new ImageIcon("./images/head3.png"));
+        }
+        add(head2);
+
         addLabel();
+
     }
 
     public void addLabel() {
