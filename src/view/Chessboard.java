@@ -1342,6 +1342,7 @@ public static boolean CheckEightEight() throws IOException {//检查棋盘是否
         if (whiteKingDanger == 1) {
             return true;
         } else return false;
+
     }
 
     public boolean PeaceOneBlack() {//黑王连续被将军，连续4次判和。
