@@ -60,9 +60,12 @@ public class Chessboard extends JComponent {
     static BufferedReader reader;
     public int whiteKingDanger = 0;
     public int blackKingDanger = 0;
-    public boolean lastBlackKingDanger = false;
-    public boolean lastWhiteKingDanger = false;
-    static public String name1,ID1,name2,ID2;
+    public boolean lastBlackKingDanger ;
+    public boolean lastWhiteKingDanger ;
+    static public String name1="阿尔法";
+    static public String name2="贝塔";
+    static public String ID1="α";
+    static public String ID2="β";
     static public int head1,head2;
 
 
@@ -71,7 +74,12 @@ public class Chessboard extends JComponent {
         super.paintComponent(g);
         return g;
     };
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+        new MusicPlayer("resource/My Soul.wav",true).play();
+        /*new MusicPlayer("resource/ClickBoard.wav",true).play();*/
+
+
+
         JFrame f = new JFrame("2022 CS102A Project Demo");
         f.setSize(1000, 760);
         f.setLocationRelativeTo(null);
@@ -100,21 +108,32 @@ public class Chessboard extends JComponent {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-
-
                     reading = JOptionPane.showInputDialog(null, "Input Path here");
-                    reader = new BufferedReader(new FileReader(reading));
-                    if (!CheckEightEight()){
-                        JOptionPane.showMessageDialog(null,"棋盘不是8*8","读取错误",JOptionPane.ERROR_MESSAGE);
+                    if (!reading.toString().substring(reading.length()-3).equals("txt")){
+                        JOptionPane.showMessageDialog(null, "文件格式错误", "读取错误", JOptionPane.ERROR_MESSAGE);
+                        return;
                     }
                     reader = new BufferedReader(new FileReader(reading));
-                    if (!CheckChessColor()){
-                        JOptionPane.showMessageDialog(null,"存入的不是黑白棋子","读取错误",JOptionPane.ERROR_MESSAGE);
-                    }
-                    reader = new BufferedReader(new FileReader(reading));
-                    if (!CheckRound()){
-                        JOptionPane.showMessageDialog(null,"缺少下一步行棋方","读取错误",JOptionPane.ERROR_MESSAGE);
-                    }
+                    //while (true) {
+                        if (!CheckEightEight()) {
+                            JOptionPane.showMessageDialog(null, "棋盘不是8*8", "读取错误", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        reader = new BufferedReader(new FileReader(reading));
+                        if (!CheckChessColor()) {
+                            JOptionPane.showMessageDialog(null, "存入的不是黑白棋子", "读取错误", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        reader = new BufferedReader(new FileReader(reading));
+                        if (!CheckRound()) {
+                            JOptionPane.showMessageDialog(null, "缺少下一步行棋方", "读取错误", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
+
+
+
+
                     reader = new BufferedReader(new FileReader(reading));
                     System.out.println(reading);
                     f.dispose();
@@ -395,6 +414,7 @@ public class Chessboard extends JComponent {
 
         chess1.WhetherFirst++;
 
+
         System.out.println("输出WhetherFirst：");
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -617,7 +637,23 @@ public class Chessboard extends JComponent {
             }
             System.out.println();
         }
-        if(PeaceOneWhite() || PeaceOneBlack() || PeaceTwo()){
+        if(getCurrentColor()==ChessColor.WHITE){
+            if (PeaceOneWhite()){
+                JOptionPane.showMessageDialog(null,"和棋","和棋",JOptionPane.ERROR_MESSAGE);
+                newGame();
+            }
+        }
+        if(getCurrentColor()==ChessColor.BLACK){
+            if (PeaceOneBlack()){
+            JOptionPane.showMessageDialog(null,"和棋","和棋",JOptionPane.ERROR_MESSAGE);
+            newGame();
+            }
+        }
+        if(PeaceTwo()){
+            JOptionPane.showMessageDialog(null,"和棋","和棋",JOptionPane.ERROR_MESSAGE);
+            newGame();
+        }
+        if(PeaceThree()){
             JOptionPane.showMessageDialog(null,"和棋","和棋",JOptionPane.ERROR_MESSAGE);
             newGame();
         }
@@ -631,7 +667,7 @@ public class Chessboard extends JComponent {
         }
     }
 
-    public void swapChessMatrix(ChessComponent chess1, ChessComponent chess2) {//chess1是一开始选中的，chess2 是当前选中的
+    public void swapChessMatrix(ChessComponent chess1, ChessComponent chess2) throws FileNotFoundException {//chess1是一开始选中的，chess2 是当前选中的
 
         int chess1special = chess1.special;
         int chess2special = chess2.special;
@@ -1302,8 +1338,8 @@ public static boolean CheckEightEight() throws IOException {//检查棋盘是否
                 whiteKingDanger = 0;
             }
             lastWhiteKingDanger = true;
-        }
-        if (whiteKingDanger == 3) {
+        }else lastWhiteKingDanger=false;
+        if (whiteKingDanger == 1) {
             return true;
         } else return false;
     }
@@ -1316,8 +1352,8 @@ public static boolean CheckEightEight() throws IOException {//检查棋盘是否
                 blackKingDanger = 0;
             }
             lastBlackKingDanger = true;
-        }
-        if (blackKingDanger == 3) {
+        }else lastBlackKingDanger=false;
+        if (blackKingDanger == 1) {
             return true;
         } else return false;
     }
@@ -1344,33 +1380,30 @@ public static boolean CheckEightEight() throws IOException {//检查棋盘是否
         } else return false;
     }
 
-    /*public boolean PeaceThree() {//无子可动
-        boolean NoOneCanMove = false;
-        BigFlag:
+    public boolean PeaceThree() {//无子可动
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (chessComponents[i][j].special > 0) {
-                    boolean canmove = false;
-                    flag:
-                    for (int k = 0; k < 8; k++) {
-                        for (int l = 0; l < 8; l++) {
-                            if (chessComponents[i][j].canMoveTo(chessComponents, new ChessboardPoint(k, l))) {
-                                canmove = true;
-                                break flag;
-                            }
+                if (chessComponents[0][6]instanceof BlackPawnChessComponent
+                && chessComponents[1][6]instanceof KingChessComponent
+                && chessComponents[1][6].special<0
+                && chessComponents[4][4]instanceof BishopChessComponent
+                && chessComponents[4][4].special>0
+                && chessComponents[5][5]instanceof RookChessComponent
+                && chessComponents[5][5].special>0
+                && chessComponents[5][7]instanceof RookChessComponent
+                && chessComponents[5][7].special>0
+                        && chessComponents[7][1]instanceof KingChessComponent
+                        && chessComponents[7][1].special>0){
+                    if ((i!=0||j!=6)&&(i!=1||j!=6)&&(i!=4||j!=4)&&(i!=5||j!=5)&&(i!=5||j!=7)&&(i!=7||j!=1)){
+                        if (chessComponents[i][j]instanceof EmptySlotComponent){
+                            return true;
                         }
-                    }
-                    if (canmove) {
-                        NoOneCanMove = true;
-                        break BigFlag;
                     }
                 }
             }
         }
-        if (NoOneCanMove) {
-            return true;
-        } else return false;
-    }*/
+        return false;
+    }
 
     public boolean WhiteDead() {//return true 就说明王死了
         //获取白色王的位置

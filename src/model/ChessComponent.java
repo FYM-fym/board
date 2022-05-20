@@ -7,6 +7,7 @@ import view.Step;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 /**
  * 这个类是一个抽象类，主要表示8*8棋盘上每个格子的棋子情况，当前有两个子类继承它，分别是EmptySlotComponent(空棋子)和RookChessComponent(车)。
@@ -97,7 +98,7 @@ public abstract class ChessComponent extends JComponent {
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
             try {
                 clickController.onClick(this);
-            } catch (InterruptedException ex) {
+            } catch (InterruptedException | FileNotFoundException ex) {
                 ex.printStackTrace();
             }
         }

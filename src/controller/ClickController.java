@@ -10,6 +10,7 @@ import view.Chessboard;
 import view.ChessboardPoint;
 import view.Step;
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -23,7 +24,7 @@ public class ClickController {
         this.chessboard = chessboard;
     }
 
-    public void onClick(ChessComponent chessComponent) throws InterruptedException {
+    public void onClick(ChessComponent chessComponent) throws InterruptedException, FileNotFoundException {
         if (first == null) {//选中的棋子是chessComponent，并且当前状态是没选中棋子
             if (handleFirst(chessComponent)) {
                 chessComponent.setSelected(true);
